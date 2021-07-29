@@ -3,9 +3,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import MinMaxScaler
+from mlfinance.utils.enumeration import search_dir
+
+import mlfinance.utils.locales as Location
 
 def dataset_files_enum():
-    pass
+    domain_to_search = Location.Base()
+    files = search_dir(domain_to_search, '.csv')
+    return files
 
 def create_dataset(df):
     x = []

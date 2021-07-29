@@ -4,10 +4,13 @@ import matplotlib.pyplot as plt
 
 from sklearn.preprocessing import MinMaxScaler
 
-def train_tensorflow():
+from mlfinance.projection_models.model_utils import load_torch_model, load_tensorflow_model, save_torch_model, save_tensorflow_model, get_torch_model, get_tensorflow_model
+from mlfinance.projection_models.dataset_utils import dataset_preprocessing
+
+def train_tensorflow(x_train, y_train, epochs, batch_size):
     model.fit(x_train, y_train, epochs=50, batch_size=32)
 
-def train_torch():
+def train_torch(x_train, y_train, epochs, batch_size):
     pass
 
 def prediction_test():

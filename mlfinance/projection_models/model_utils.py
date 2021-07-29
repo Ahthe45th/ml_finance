@@ -16,18 +16,26 @@ class classifier(nn.Module):
         super(classifier, self).__init__()
         self.hidden_size = 32
         self.lstm1 = nn.LSTM(
-            input_size=64,
-            hidden_size=self.hidden_size,
-            num_layers=2,
-            dropout=0.5,
-            batch_first=True,
-            bidirectional=True
+            input_size=96,hidden_size=self.hidden_size,
+            num_layers=2,dropout=0.2,
+            batch_first=True,bidirectional=True
             )
-        self.batchnorm = nn.BatchNorm1d(self.hidden_size*2)
-        self.drop_en = nn.Dropout(p=0.5)
-        self.lin2 = nn.Linear(self.hidden_size*2, 32)
+        self.lstm2 = nn.LSTM(
+            input_size=96,hidden_size=self.hidden_size,
+            num_layers=2,dropout=0.2,
+            batch_first=True,bidirectional=True
+            )
+        self.lstm3 = nn.LSTM(
+            input_size=96,hidden_size=self.hidden_size,
+            num_layers=2,dropout=0.2,
+            batch_first=True,bidirectional=True
+            )
+        self.lstm4 = nn.LSTM(
+            input_size=96,hidden_size=self.hidden_size,
+            num_layers=2,dropout=0.2,
+            batch_first=True,bidirectional=True
+            )
         self.output = nn.Linear(32, 1)
-        self.intent_output = nn.Linear(32, self.numintents)
         self.still_debug = True
         # self.hidden = self.init_hidden()
 
@@ -59,7 +67,6 @@ class classifier(nn.Module):
 def get_tensorflow_model():
     ## define basic model class
     model = keras.models.Sequential()
-    ## add layering
     model.add(keras.layers.LSTM(units=96, return_sequences=True, input_shape=(x_train.shape[1], 1)))
     model.add(keras.layers.Dropout(0.2))
     model.add(keras.layers.LSTM(units=96, return_sequences=True))
