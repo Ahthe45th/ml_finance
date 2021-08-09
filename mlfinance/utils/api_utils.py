@@ -8,6 +8,13 @@ import json
 import time
 import requests
 import datetime
+import twint
+import nest_asyncio
+nest_asyncio.apply()
+import time
+import pandas as pd
+import os
+import re
 
 import mlfinance.utils.locales as Location
 
@@ -141,3 +148,15 @@ def enumerate_stocks_finnhub(tickers):
             num_of_calls = 0
         else:
             finnhub_metrics(ticker)
+
+def read_tweets(about):
+    timestr = time.strftime("%d.%m.%Y")
+    c = twint.Config()
+    c.Limit = 10
+    c.Lang = "en"
+    c.Store_csv = True
+    c.Search = about
+    dir = Location.Base() '/' + timestr
+    os.makedirs(dir)
+    c.Output = dir + "/_" + c.Lang + "_" + about + ".csv"
+    twint.run.Search(c)

@@ -17,7 +17,7 @@ class classifier(nn.Module):
         self.hidden_size = 32
         self.lstm1 = nn.LSTM(
             input_size=96,hidden_size=self.hidden_size,
-            num_layers=2,dropout=0.2,
+            num_layers=2,
             batch_first=True,bidirectional=True
             )
         self.lstm2 = nn.LSTM(
@@ -27,7 +27,7 @@ class classifier(nn.Module):
             )
         self.lstm3 = nn.LSTM(
             input_size=96,hidden_size=self.hidden_size,
-            num_layers=2,dropout=0.2,
+            num_layers=2,dropout=0.5,
             batch_first=True,bidirectional=True
             )
         self.lstm4 = nn.LSTM(
@@ -36,7 +36,6 @@ class classifier(nn.Module):
             batch_first=True,bidirectional=True
             )
         self.output = nn.Linear(32, 1)
-        self.still_debug = True
         # self.hidden = self.init_hidden()
 
     def forward(self, input1, debug=False):

@@ -12,6 +12,9 @@ import mlfinance.utils.locales as Location
 
 from mlfinance.utils.general_utils import enum_extension_files, force_mkdir, save_json
 
+from vaderSentiment import SentimentIntensityAnalyzer
+
+sentiment_analyzer = SentimentIntensityAnalyzer()
 
 def general_metrics ():
     pass
@@ -44,3 +47,9 @@ def gainers(number_to_return=10):
         frame += 1
     sorted_prices = sorted(price_rises, key=lambda x: x['price'], reverse=True)[:number_to_return]
     print(sorted_prices)
+
+def analyze_tweets(tweet_file):
+    df = pd.read_csv(tweet_file)
+    tweet_list = df.tweet.tolist()
+    sentiments = [sentiment_analyzer.polarity_scores(tweet) for tweet in tweet_list]
+    return sentiments

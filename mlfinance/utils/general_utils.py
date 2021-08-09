@@ -1,5 +1,5 @@
 import os
-import logging
+import platform
 import datetime
 import random
 import string
@@ -32,13 +32,8 @@ def trace_print_statements():
     sys.stdout = TracePrints()
 
 def force_mkdir(path):
-    dirstring = '/'
-    dirs = path.split('/')
-    for dir in dirs:
-        dirstring += dir
-        if not os.path.exists(dirstring):
-            os.mkdir(dirstring)
-        dirstring += '/'
+    if not os.path.exists(path):
+        os.makedirs(path)
 
 def save_json(name, path, jsonn):
     filename = path + '/' + name + '.json'
