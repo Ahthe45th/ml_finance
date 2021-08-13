@@ -149,10 +149,10 @@ def enumerate_stocks_finnhub(tickers):
         else:
             finnhub_metrics(ticker)
 
-def read_tweets(about):
+def read_tweets(about, limit=1000):
     timestr = time.strftime("%d.%m.%Y")
     c = twint.Config()
-    c.Limit = 10
+    c.Limit = limit
     c.Lang = "en"
     c.Store_csv = True
     c.Search = about
@@ -160,3 +160,7 @@ def read_tweets(about):
     os.makedirs(dir)
     c.Output = dir + "/_" + c.Lang + "_" + about + ".csv"
     twint.run.Search(c)
+
+if __name__='__main__':
+    keyword = input('Put in keyword: ')
+    read_tweets(keyword)

@@ -13,6 +13,7 @@ def dataset_files_enum():
     return files
 
 def create_dataset(df):
+    #so over here one must realize that the guy is using the value for the stock 50 days later as the y
     x = []
     y = []
     for i in range(50, df.shape[0]):
@@ -55,3 +56,5 @@ def dataset_preprocessing():
     return dataset_dict
 
 def nlp_basic_preprocessing():
+    '''No need to worry about this rn'''
+    pass
