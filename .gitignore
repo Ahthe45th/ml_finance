@@ -1,2 +1,4 @@
 *.pyc
 mlfinance/nlp/data
+mlfinance/nlp/lightning_logs
+lightning_logs
