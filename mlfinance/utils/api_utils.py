@@ -16,10 +16,13 @@ import pandas as pd
 import os
 import re
 
-import mlfinance.utils.locales as Location
+import sys
+from getpaths import getpath
+sys.path.append(getpath())
 
-from mlfinance.utils.ticker_utils import get_tickers, s_and_p_tickers
-from mlfinance.utils.general_utils import enum_extension_files, force_mkdir, save_json
+import locales as Location
+from ticker_utils import get_tickers, s_and_p_tickers
+from general_utils import enum_extension_files, force_mkdir, save_json
 
 from googlefinance import getQuotes
 
@@ -29,6 +32,8 @@ s_and_p_dict = {ticker:s_and_p_names[s_and_p_symbols.index(ticker)] for ticker i
 
 finnhub_api_key = 'c3ctr3qad3i868dolgpg'
 finnhub_client = finnhub.Client(api_key=finnhub_api_key)
+
+
 
 def finnhub_metrics(ticker):
     metrics_pth = Location.Home(__file__) + '/stocks/finnhub_metrics/'
@@ -56,11 +61,15 @@ def finnhub_metrics(ticker):
     news = finnhub_client.company_news(ticker, _from=last_year_str, to=today_str)
     save_json('news', year_pth, news)
 
+
+
 def fetchstockquotes_google(symbol):
     while True:
         time.sleep(5)
         os.system('cls' if os.name=='nt' else 'clear')
         return getQuotes(symbol)
+
+
 
 def get_price(tickers):
     url = "https://financialmodelingprep.com/api/v3/historical-price-full/MSFT,AAPL,GOOG"
@@ -68,6 +77,8 @@ def get_price(tickers):
     request = session.get(url, timeout=15)
     stock_data = request.json()
     return stock_data
+
+
 
 def get_company_name(symbol):
     if symbol in s_and_p_dict:
@@ -78,6 +89,8 @@ def get_company_name(symbol):
         for item in result['ResultSet']['Result']:
             if item['symbol'] == symbol:
                 return item['name']
+
+
 
 def get_historical_data(ticker, period='max'):
     today_date = datetime.date.today().replace(day=1)
@@ -96,6 +109,8 @@ def get_historical_data(ticker, period='max'):
             else:
                 data = yf.download(ticker, start=last_year_str, end=today_str)
                 data.to_csv(ticker_pth)
+
+
 
 def enumerate_stocks_yahoo(tickers, Amount_of_API_Calls=0, Stock_Failure=0, Stocks_Not_Imported=0):
     print("The amount of stocks chosen to observe: " + str(len(tickers)))
@@ -136,6 +151,8 @@ def enumerate_stocks_yahoo(tickers, Amount_of_API_Calls=0, Stock_Failure=0, Stoc
     print(f"The amount of stocks we successfully imported:{i - Stocks_Not_Imported}")
     return Amount_of_API_Calls, Stock_Failure, Stocks_Not_Imported
 
+
+
 def enumerate_stocks_finnhub(tickers):
     num_of_calls = 0
     for ticker in tickers:
@@ -149,6 +166,8 @@ def enumerate_stocks_finnhub(tickers):
         else:
             finnhub_metrics(ticker)
 
+
+
 def read_tweets(about, limit=1000):
     timestr = time.strftime("%d.%m.%Y")
     c = twint.Config()
@@ -156,11 +175,12 @@ def read_tweets(about, limit=1000):
     c.Lang = "en"
     c.Store_csv = True
     c.Search = about
-    dir = Location.Base() '/' + timestr
+    dir = Location.Base() + '/' + timestr
     os.makedirs(dir)
     c.Output = dir + "/_" + c.Lang + "_" + about + ".csv"
     twint.run.Search(c)
 
-if __name__='__main__':
+
+if __name__ == '__main__':
     keyword = input('Put in keyword: ')
     read_tweets(keyword)

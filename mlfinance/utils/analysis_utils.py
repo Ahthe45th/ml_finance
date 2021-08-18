@@ -9,11 +9,17 @@ import time
 import requests
 import datetime
 
-import mlfinance.utils.locales as Location
 
-from mlfinance.utils.general_utils import enum_extension_files, force_mkdir, save_json
+import sys
+from getpaths import getpath
+sys.path.append(getpath())
 
-from vaderSentiment import SentimentIntensityAnalyzer
+
+import locales as Location
+from general_utils import enum_extension_files, force_mkdir, save_json
+
+
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 sentiment_analyzer = SentimentIntensityAnalyzer()
 
