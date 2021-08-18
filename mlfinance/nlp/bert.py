@@ -24,7 +24,7 @@ BERT_MODEL_NAME = "bert-base-cased"
 
 # get data
 cwd = getpath()
-df = pd.read_csv(cwd / "toxic_comments.csv")
+df = pd.read_csv(cwd / "toxic_comments_small.csv")
 
 
 data_module = ToxicCommentDataModule(
