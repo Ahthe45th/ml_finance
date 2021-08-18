@@ -4,7 +4,15 @@ from omegaconf import DictConfig
 
 
 def main(cfg):
-    print(cfg)
+    """
+training, testing, and evaluating done here
+    """
+    if cfg.mode == 'train':
+        pass
+    elif cfg.mode == 'test':
+        pass
+    else:
+        pass
 
 
 
