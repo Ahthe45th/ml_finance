@@ -4,3 +4,5 @@ mlfinance/nlp/lightning_logs
 lightning_logs
 mlfinance/nlp/outputs
 mlfinance/nlp/multirun
+mlfinance/outputs
+outputs
