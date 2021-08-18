@@ -345,3 +345,6 @@ trainer = pl.Trainer(
 # %%
 trainer.fit(model, data_module)
 # %%
+
+
+trainer.save_checkpoint(filepath)
