@@ -1,9 +1,8 @@
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 
 
-
 def checkpoint_callback():
-    callback =  ModelCheckpoint(
+    callback = ModelCheckpoint(
         dirpath="checkpoints",
         filename="best-checkpoint",
         save_top_k=1,

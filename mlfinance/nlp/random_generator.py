@@ -12,7 +12,6 @@ import random
 from getpaths import getpath
 
 
-
 def random_text(num_characters: int = None) -> str:
     """
     returns random text of length num_characters
@@ -27,7 +26,6 @@ def random_text(num_characters: int = None) -> str:
         text_list.append(random.choice(char_list))
 
     return "".join(text_list)
-
 
 
 def json_random_sentence() -> str:
@@ -51,7 +49,6 @@ def json_random_sentence() -> str:
     return sentence
 
 
-
 def csv_random_sentence() -> str:
 
     num_characters = 30
@@ -62,7 +59,6 @@ def csv_random_sentence() -> str:
     )
 
     return sentence
-
 
 
 def make_json_data() -> None:
@@ -89,7 +85,6 @@ def make_json_data() -> None:
         file_handler.write("".join(sentences))
 
 
-
 def make_csv_data() -> None:
     cwd = getpath()
 
@@ -109,7 +104,6 @@ def make_csv_data() -> None:
 
     with open(data_directory / "train.csv", "w") as file_handler:
         file_handler.write("".join(sentences))
-
 
 
 if __name__ == "__main__":

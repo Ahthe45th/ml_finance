@@ -1,2 +1,2 @@
 def main(name):
-    print(f'{name} you found me!')
+    print(f"{name} you found me!")

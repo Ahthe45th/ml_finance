@@ -7,11 +7,8 @@ import pytorch_lightning as pl
 from typing import Optional
 
 
-
 class ToxicCommentsDataset(Dataset):
-    def __init__(
-        self, data: pd.DataFrame, tokenizer, max_token_len: int = 128
-    ):
+    def __init__(self, data: pd.DataFrame, tokenizer, max_token_len: int = 128):
         self.tokenizer = tokenizer
         self.data = data
         self.max_token_len = max_token_len
@@ -45,13 +42,14 @@ class ToxicCommentsDataset(Dataset):
         )
 
 
-
 class ToxicCommentDataModule(pl.LightningDataModule):
-    def __init__(self,
-                 df,
-                 tokenizer=BertTokenizer.from_pretrained('bert-base-uncased'),
-                 batch_size=1,
-                 max_token_len=128):
+    def __init__(
+        self,
+        df,
+        tokenizer=BertTokenizer.from_pretrained("bert-base-uncased"),
+        batch_size=1,
+        max_token_len=128,
+    ):
 
         super().__init__()
         self.batch_size = batch_size
@@ -61,35 +59,28 @@ class ToxicCommentDataModule(pl.LightningDataModule):
 
         self.train_dataset = None
         self.test_dataset = None
-    
-    def setup(self, stage: Optional[str] = None):
-        self.train_dataset = ToxicCommentsDataset(self.train_df,
-                                                  self.tokenizer,
-                                                  self.max_token_len)
-        
-        self.test_dataset = ToxicCommentsDataset(self.test_df,
-                                                 self.tokenizer,
-                                                 self.max_token_len)
 
+    def setup(self, stage: Optional[str] = None):
+        self.train_dataset = ToxicCommentsDataset(
+            self.train_df, self.tokenizer, self.max_token_len
+        )
+
+        self.test_dataset = ToxicCommentsDataset(
+            self.test_df, self.tokenizer, self.max_token_len
+        )
 
     def train_dataloader(self):
         return DataLoader(
             self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=0
         )
 
-
     def val_dataloader(self):
-        return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, num_workers=0
-        )
-
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=0)
 
     def test_dataloader(self):
-        return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, num_workers=0
-        )
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=0)
 
 
 if __name__ == "__main__":
-    #TODO: write short example of how to use DataModule
+    # TODO: write short example of how to use DataModule
     pass

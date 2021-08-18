@@ -6,9 +6,14 @@ import torch
 from .help import pickle
 
 
-
 class ToxicCommentTagger(pl.LightningModule):
-    def __init__(self, n_classes: int, n_training_steps=None, n_warmup_steps=None, BERT_MODEL_NAME="bert-base-cased"):
+    def __init__(
+        self,
+        n_classes: int,
+        n_training_steps=None,
+        n_warmup_steps=None,
+        BERT_MODEL_NAME="bert-base-cased",
+    ):
         super().__init__()
         self.BERT_MODEL_NAME = BERT_MODEL_NAME
         self.bert = BertModel.from_pretrained(BERT_MODEL_NAME, return_dict=True)

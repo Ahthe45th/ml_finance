@@ -11,11 +11,9 @@ from bert.data import ToxicCommentDataModule, ToxicCommentsDataset
 from callbacks import checkpoint_callback, early_stopping_callback
 
 
-
 # get config
 RANDOM_SEED = 42
 pl.seed_everything(RANDOM_SEED)
-
 
 
 N_EPOCHS = 1
@@ -60,4 +58,4 @@ trainer = pl.Trainer(
 
 trainer.fit(model, data_module)
 
-trainer.save_checkpoint('test_checkpoint')
+trainer.save_checkpoint("test_checkpoint")
