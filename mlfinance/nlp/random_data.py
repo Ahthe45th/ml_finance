@@ -4,11 +4,18 @@
 This makes random data for training and stores it in mlfinance/nlp/data
 
 
+Random data takes the form of a csv:
+
+id,   text,   labels, ...
+str,   str,   str,    ...
+
+
 """
 
 
 import os
 import random
+import pandas as pd
 from getpaths import getpath
 
 
@@ -17,7 +24,7 @@ def random_text(num_characters: int = None) -> str:
     returns random text of length num_characters
     """
 
-    chars = " abcdefghijklmnopqrstuvwxyz1234567890"
+    chars = "    abcdefghijklmnopqrstuvwxyz1234567890'!@#$%^&*()"
     char_list = [char for char in chars]
 
     text_list = []
