@@ -1,31 +1,7 @@
 """
 
+
 This makes random data for training and stores it in mlfinance/nlp/data
-
-
-
-
-Data takes the form of
-
-...
-{
-    "label": "stock",
-    "text": "I'm feeling quite sad and sorry for TSLA but I'll snap out of it soon."
-}
-{
-    "label": "general",
-    "text": "I'm feeling quite sad and sorry for myself but I'll snap out of it soon."
-}
-...
-
-
-
-pl-transformers-train \
-    task=nlp/text_classification \
-    dataset=nlp/text_classification/emotion \
-    dataset.cfg.train_file=/Users/jvkyleeclarin/Desktop/ml_finance/mlfinance/nlp/data/train.csv \
-    trainer.gpus=0
-
 
 
 """
@@ -34,6 +10,7 @@ pl-transformers-train \
 import os
 import random
 from getpaths import getpath
+
 
 
 def random_text(num_characters: int = None) -> str:
@@ -50,6 +27,7 @@ def random_text(num_characters: int = None) -> str:
         text_list.append(random.choice(char_list))
 
     return "".join(text_list)
+
 
 
 def json_random_sentence() -> str:
@@ -73,6 +51,7 @@ def json_random_sentence() -> str:
     return sentence
 
 
+
 def csv_random_sentence() -> str:
 
     num_characters = 30
@@ -83,6 +62,7 @@ def csv_random_sentence() -> str:
     )
 
     return sentence
+
 
 
 def make_json_data() -> None:
@@ -109,6 +89,7 @@ def make_json_data() -> None:
         file_handler.write("".join(sentences))
 
 
+
 def make_csv_data() -> None:
     cwd = getpath()
 
@@ -128,6 +109,7 @@ def make_csv_data() -> None:
 
     with open(data_directory / "train.csv", "w") as file_handler:
         file_handler.write("".join(sentences))
+
 
 
 if __name__ == "__main__":
