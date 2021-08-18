@@ -1,1 +1,3 @@
-model: BERT
+defaults:
+  - cpu: default
+  - gpu: default
