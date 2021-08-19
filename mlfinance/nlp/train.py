@@ -2,7 +2,11 @@ import hydra
 from hydra import compose, initialize
 from omegaconf import DictConfig
 from getpaths import getpath
-from .utils import using_gpu
+
+try:
+    from .utils import using_gpu
+except ImportError:
+    from utils import using_gpu
 
 
 
