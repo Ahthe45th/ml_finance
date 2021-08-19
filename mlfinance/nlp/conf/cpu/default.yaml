@@ -21,3 +21,5 @@ trainer:
 
 checkpoint:
   name: checkpoint_${now:%Y-%m-%d}_${now:%H-%M-%S}
+
+custom: false

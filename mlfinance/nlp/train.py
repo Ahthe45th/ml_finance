@@ -11,6 +11,8 @@ import hydra
 from hydra import compose, initialize
 from omegaconf import DictConfig
 from getpaths import getpath
+from mlfinance.nlp.bert.model import ToxicCommentTagger
+from mlfinance.nlp.bert.data import ToxicCommentDataModule
 
 try:
     from .utils import using_gpu
@@ -57,28 +59,21 @@ class Bert():
         self.datamodule = None
         self.trainer = None
         
-
+    
     def train(self):
-        # make sure _target_ is always up to date when switching with custom model
-        if self.model != None:
-            self.cfg.model._target_ = repr(self.model).split("'")[-2]
-        if self.datamodule != None:
-            self.cfg.datamodule._target_ = repr(self.datamodule).split("'")[-2]
-        if self.trainer != None:
-            self.cfg.trainer._target_ = repr(self.trainer).split("'")[-2]
+        if self.cfg.custom == False:
+            print('loading model...') #this takes some time
+            self.model = hydra.utils.instantiate(self.cfg.model)
 
-        print('loading model from https://huggingface.co/api/models/...') #this takes some time
-        self.model = hydra.utils.instantiate(self.cfg.model)
+            self.datamodule = hydra.utils.instantiate(self.cfg.datamodule)
 
-        self.datamodule = hydra.utils.instantiate(self.cfg.datamodule)
+            self.trainer = hydra.utils.instantiate(self.cfg.trainer)
 
-        self.trainer = hydra.utils.instantiate(self.cfg.trainer)
-
-        # make sure the tokenizer is for the right model
-        self.datamodule.name = self.model.name
-        # make sure that the model is the right size
-        self.model.n_classes = self.datamodule.n_classes
-        self.model.bert.resize_token_embeddings(len(self.datamodule.tokenizer))
+            # make sure the tokenizer is for the right model
+            self.datamodule.name = self.model.name
+            # make sure that the model is the right size
+            self.model.n_classes = self.datamodule.n_classes
+            self.model.bert.resize_token_embeddings(len(self.datamodule.tokenizer))
 
         self.trainer.fit(self.model, self.datamodule)
 
