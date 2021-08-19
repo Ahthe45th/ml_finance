@@ -18,3 +18,6 @@ trainer:
   max_epochs: 1
   progress_bar_refresh_rate: 1
   gpus: 0
+
+checkpoint:
+  name: checkpoint_${now:%Y-%m-%d}_${now:%H-%M-%S}
