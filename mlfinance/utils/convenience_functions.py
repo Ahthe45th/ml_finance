@@ -10,6 +10,9 @@ def using_gpu():
         torch.cuda.current_device()
         # GPU is being used!
         return True
+    except AssertionError:
+        # GPU is not being used!
+        return False
     except AttributeError:
         # GPU is not being used!
         return False
