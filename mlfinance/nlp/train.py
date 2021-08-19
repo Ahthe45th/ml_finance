@@ -15,7 +15,8 @@ def main(cfg):
     training, testing, and evaluating done here
     """
     if cfg.mode == "train":
-        pass
+        bert = Bert(cfg)
+        bert.train()
     elif cfg.mode == "test":
         pass
     else:
@@ -26,10 +27,13 @@ def main(cfg):
 
 
 class Bert():
-    def __init__(self):
+    def __init__(self, cfg=None):
         # get config file
-        initialize(config_path="conf")
-        self.cfg = compose(config_name="config")
+        if cfg == None:
+            initialize(config_path="conf")
+            self.cfg = compose(config_name="config")
+        else:
+            self.cfg = cfg
 
         if using_gpu():
             self.cfg = self.cfg['gpu']
