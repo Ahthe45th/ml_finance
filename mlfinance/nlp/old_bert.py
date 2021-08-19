@@ -23,12 +23,11 @@ BERT_MODEL_NAME = "bert-base-cased"
 
 
 # get data
-cwd = getpath()
-df = pd.read_csv(cwd / "toxic_comments_small.csv")
+df_path = getpath() / "toxic_comments_small.csv"
 
 
 data_module = ToxicCommentDataModule(
-    df, batch_size=BATCH_SIZE, max_token_len=MAX_TOKEN_COUNT
+    df_path, batch_size=BATCH_SIZE, max_token_len=MAX_TOKEN_COUNT
 )
 
 
@@ -44,8 +43,10 @@ model = ToxicCommentTagger(
     n_training_steps=1,
 )
 
+
 # need to resize model so that the math works out
 model.bert.resize_token_embeddings(len(data_module.tokenizer))
+
 
 
 trainer = pl.Trainer(
@@ -56,6 +57,8 @@ trainer = pl.Trainer(
 )
 
 
+
 trainer.fit(model, data_module)
+
 
 trainer.save_checkpoint("test_checkpoint")
