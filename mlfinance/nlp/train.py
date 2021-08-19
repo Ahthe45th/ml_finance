@@ -1,3 +1,12 @@
+'''
+
+Adapted from Venelin Valkov
+https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytorch-lightning/
+
+
+'''
+
+
 import hydra
 from hydra import compose, initialize
 from omegaconf import DictConfig

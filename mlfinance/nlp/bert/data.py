@@ -1,3 +1,11 @@
+'''
+
+Adapted from Venelin Valkov
+https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytorch-lightning/
+
+'''
+
+
 from torch.utils.data import Dataset, DataLoader
 from torch import FloatTensor
 from transformers import BertTokenizerFast as BertTokenizer
