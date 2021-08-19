@@ -39,7 +39,11 @@ class Bert():
     def __init__(self, cfg=None):
         # get config file
         if cfg == None:
-            initialize(config_path="conf")
+            try:
+                initialize(config_path="conf")
+            except ValueError:
+                # GlobalHydra already initialized
+                pass
             self.cfg = compose(config_name="config")
         else:
             self.cfg = cfg
@@ -49,8 +53,20 @@ class Bert():
         else:
             self.cfg = self.cfg['cpu']
         
+        self.model = None
+        self.datamodule = None
+        self.trainer = None
+        
 
     def train(self):
+        # make sure _target_ is always up to date when switching with custom model
+        if self.model != None:
+            self.cfg.model._target_ = repr(self.model).split("'")[-2]
+        if self.datamodule != None:
+            self.cfg.datamodule._target_ = repr(self.datamodule).split("'")[-2]
+        if self.trainer != None:
+            self.cfg.trainer._target_ = repr(self.trainer).split("'")[-2]
+
         print('loading model from https://huggingface.co/api/models/...') #this takes some time
         self.model = hydra.utils.instantiate(self.cfg.model)
 
