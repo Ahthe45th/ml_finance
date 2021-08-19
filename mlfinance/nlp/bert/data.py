@@ -52,10 +52,12 @@ class ToxicCommentDataModule(pl.LightningDataModule):
         data_path=None,
         batch_size=1,
         max_token_len=128,
+        num_workers=0
     ):
 
         super().__init__()
         self.batch_size = batch_size
+        self.num_workers = num_workers
         
         self.model_name = model_name
         if self.model_name == None:
@@ -85,14 +87,14 @@ class ToxicCommentDataModule(pl.LightningDataModule):
 
     def train_dataloader(self):
         return DataLoader(
-            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=0
+            self.train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=self.num_workers
         )
 
     def val_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=0)
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=self.num_workers)
 
     def test_dataloader(self):
-        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=0)
+        return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=self.num_workers)
 
 
 
