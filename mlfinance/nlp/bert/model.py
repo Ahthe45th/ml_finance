@@ -3,20 +3,19 @@ from transformers import BertModel
 import torch.nn as nn
 from transformers import get_linear_schedule_with_warmup, AdamW
 import torch
-from .help import pickle
 
 
 class ToxicCommentTagger(pl.LightningModule):
     def __init__(
         self,
-        n_classes: int,
-        n_training_steps=None,
-        n_warmup_steps=None,
-        BERT_MODEL_NAME="bert-base-cased",
+        n_classes: int = None,
+        n_training_steps: int = None,
+        n_warmup_steps: int = None,
+        name: str = "bert-base-cased",
     ):
         super().__init__()
-        self.BERT_MODEL_NAME = BERT_MODEL_NAME
-        self.bert = BertModel.from_pretrained(BERT_MODEL_NAME, return_dict=True)
+        self.name = name
+        self.bert = BertModel.from_pretrained(name, return_dict=True)
         self.classifier = nn.Linear(self.bert.config.hidden_size, n_classes)
         self.n_training_steps = n_training_steps
         self.n_warmup_steps = n_warmup_steps
@@ -68,9 +67,6 @@ class ToxicCommentTagger(pl.LightningModule):
         labels = torch.stack(labels).int()
         predictions = torch.stack(predictions)
 
-        """    for i, name in enumerate(LABEL_COLUMNS):
-      class_roc_auc = auroc(predictions[:, i], labels[:, i])
-      self.logger.experiment.add_scalar(f"{name}_roc_auc/Train", class_roc_auc, self.current_epoch)"""
 
     def configure_optimizers(self):
 

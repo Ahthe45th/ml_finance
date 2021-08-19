@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 import pytorch_lightning as pl
 from typing import Optional
+from getpaths import getpath
+
 
 
 class ToxicCommentsDataset(Dataset):
@@ -12,6 +14,7 @@ class ToxicCommentsDataset(Dataset):
         self.tokenizer = tokenizer
         self.data = data
         self.max_token_len = max_token_len
+        self.label_columns = self.data.columns.tolist()[2:]
 
     def __len__(self):
         return len(self.data)
@@ -20,8 +23,7 @@ class ToxicCommentsDataset(Dataset):
         data_row = self.data.iloc[index]
 
         comment_text = data_row.comment_text
-        LABEL_COLUMNS = self.data.columns.tolist()[2:]
-        labels = data_row[LABEL_COLUMNS]
+        labels = data_row[self.label_columns]
 
         encoding = self.tokenizer.encode_plus(
             comment_text,
@@ -42,19 +44,31 @@ class ToxicCommentsDataset(Dataset):
         )
 
 
+
 class ToxicCommentDataModule(pl.LightningDataModule):
     def __init__(
         self,
-        df,
-        tokenizer=BertTokenizer.from_pretrained("bert-base-uncased"),
+        model_name = None,
+        data_path=None,
         batch_size=1,
         max_token_len=128,
     ):
 
         super().__init__()
         self.batch_size = batch_size
+        
+        self.model_name = model_name
+        if self.model_name == None:
+            self.model_name = "bert-base-uncased"
+        
+        if data_path == None:
+            df = pd.read_csv(getpath()/'toxic_comments_small.csv')
+        else:
+            df = pd.read_csv(data_path)
+
+        self.n_classes = len(df.columns.tolist()[2:])
         self.train_df, self.test_df = train_test_split(df, test_size=0.2)
-        self.tokenizer = tokenizer
+        self.tokenizer = BertTokenizer.from_pretrained(self.model_name)
         self.max_token_len = max_token_len
 
         self.train_dataset = None
@@ -79,6 +93,7 @@ class ToxicCommentDataModule(pl.LightningDataModule):
 
     def test_dataloader(self):
         return DataLoader(self.test_dataset, batch_size=self.batch_size, num_workers=0)
+
 
 
 if __name__ == "__main__":
