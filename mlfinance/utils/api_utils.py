@@ -16,15 +16,15 @@ import pandas as pd
 import os
 import re
 
-import sys
-from getpaths import getpath
-sys.path.append(getpath())
 
-import locales as Location
-from ticker_utils import get_tickers, s_and_p_tickers
-from general_utils import enum_extension_files, force_mkdir, save_json
+import mlfinance.utils.locales as Location
+
+from mlfinance.utils.ticker_utils import get_tickers, s_and_p_tickers
+from mlfinance.utils.general_utils import enum_extension_files, force_mkdir, save_json
 
 from googlefinance import getQuotes
+
+
 
 s_and_p_names = s_and_p_tickers(get_back='Security')
 s_and_p_symbols = s_and_p_tickers()
