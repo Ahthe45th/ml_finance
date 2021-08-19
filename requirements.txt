@@ -12,3 +12,4 @@ vaderSentiment==3.3.2
 twint==2.1.20
 nest-asyncio==1.5.1
 googlefinance==0.7
+scikit-learn==0.24.1
