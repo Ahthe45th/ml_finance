@@ -1,18 +1,18 @@
-'''
+"""
 
 Adapted from Venelin Valkov
 https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytorch-lightning/
 
 
-'''
+"""
 
 
 import hydra
 from hydra import compose, initialize
 from omegaconf import DictConfig
 from getpaths import getpath
-from mlfinance.nlp.bert.model import ToxicCommentTagger
-from mlfinance.nlp.bert.data import ToxicCommentDataModule
+
+
 
 try:
     from .utils import using_gpu
@@ -35,9 +35,7 @@ def main(cfg):
 
 
 
-
-
-class Bert():
+class Bert:
     def __init__(self, cfg=None):
         # get config file
         if cfg == None:
@@ -51,18 +49,18 @@ class Bert():
             self.cfg = cfg
 
         if using_gpu():
-            self.cfg = self.cfg['gpu']
+            self.cfg = self.cfg["gpu"]
         else:
-            self.cfg = self.cfg['cpu']
-        
+            self.cfg = self.cfg["cpu"]
+
         self.model = None
         self.datamodule = None
         self.trainer = None
-        
-    
+
+
     def train(self):
         if self.cfg.custom == False:
-            print('loading model...') #this takes some time
+            print("loading model...")  # this takes some time
             self.model = hydra.utils.instantiate(self.cfg.model)
 
             self.datamodule = hydra.utils.instantiate(self.cfg.datamodule)

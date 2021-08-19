@@ -67,7 +67,6 @@ class ToxicCommentTagger(pl.LightningModule):
         labels = torch.stack(labels).int()
         predictions = torch.stack(predictions)
 
-
     def configure_optimizers(self):
 
         optimizer = AdamW(self.parameters(), lr=2e-5)
