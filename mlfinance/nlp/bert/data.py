@@ -14,6 +14,7 @@ import pandas as pd
 import pytorch_lightning as pl
 from typing import Optional
 from getpaths import getpath
+from os.path import abspath
 
 
 class ToxicCommentsDataset(Dataset):
@@ -70,7 +71,8 @@ class ToxicCommentDataModule(pl.LightningDataModule):
             self.model_name = "bert-base-uncased"
 
         if data_path == None:
-            df = pd.read_csv(getpath() / "toxic_comments_small.csv")
+            cwd = getpath(abspath(__file__), custom=True)
+            df = pd.read_csv(cwd/'..'/'..'/"toxic_comments_small.csv")
         else:
             df = pd.read_csv(data_path)
 

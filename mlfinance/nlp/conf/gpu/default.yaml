@@ -11,7 +11,7 @@ datamodule:
   data_path: null
   max_token_len: 512
   batch_size: 32
-  num_workers: -1
+  num_workers: 2
 
 trainer:
   _target_: pytorch_lightning.Trainer
