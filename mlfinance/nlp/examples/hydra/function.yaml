@@ -1,0 +1,3 @@
+call:
+  _target_: tests.partner.main
+  name: Bob

@@ -1,0 +1,4 @@
+defaults:
+  - cpu: default
+  - gpu: default
+mode: train

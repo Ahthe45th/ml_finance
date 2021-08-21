@@ -1,0 +1,25 @@
+model:
+  _target_: mlfinance.nlp.bert.model.ToxicCommentTagger
+  name: "bert-base-cased"
+  n_classes: 6
+  n_training_steps: 1
+  n_warmup_steps: 1
+
+datamodule:
+  _target_: mlfinance.nlp.bert.data.ToxicCommentDataModule
+  model_name: null
+  data_path: null
+  batch_size: 1
+  max_token_len: 512
+  num_workers: 0
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  max_epochs: 1
+  progress_bar_refresh_rate: 1
+  gpus: 0
+
+checkpoint:
+  name: checkpoint_${now:%Y-%m-%d}_${now:%H-%M-%S}
+
+custom: false

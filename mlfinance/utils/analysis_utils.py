@@ -10,10 +10,11 @@ import requests
 import datetime
 
 import mlfinance.utils.locales as Location
-
 from mlfinance.utils.general_utils import enum_extension_files, force_mkdir, save_json
 
-from vaderSentiment import SentimentIntensityAnalyzer
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+
+
 
 sentiment_analyzer = SentimentIntensityAnalyzer()
 
