@@ -1,5 +1,0 @@
-yfinance==0.1.59
-googlefinance==0.7
-finnhub_python==2.4.0
-requests==2.24.0
-pandas==1.1.3

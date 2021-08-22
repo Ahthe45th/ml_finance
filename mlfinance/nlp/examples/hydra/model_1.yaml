@@ -1,0 +1,4 @@
+call:
+  _target_: tests.example_model.Model
+  name: BERT
+  lr: 2e-4

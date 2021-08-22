@@ -1,0 +1,4 @@
+call:
+  _target_: tests.example_model.Model
+  name: Inceptionv5
+  lr: 1e-3
