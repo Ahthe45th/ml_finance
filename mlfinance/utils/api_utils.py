@@ -156,11 +156,11 @@ def read_tweets(about, limit=1000):
     c.Lang = "en"
     c.Store_csv = True
     c.Search = about
-    dir = Location.Base() '/' + timestr
+    dir = Location.Home(__file__) + '/' + timestr
     os.makedirs(dir)
     c.Output = dir + "/_" + c.Lang + "_" + about + ".csv"
     twint.run.Search(c)
 
-if __name__='__main__':
+if __name__ == '__main__':
     keyword = input('Put in keyword: ')
     read_tweets(keyword)

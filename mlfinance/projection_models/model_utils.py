@@ -4,9 +4,6 @@ import torch.nn.functional as F
 
 torch.manual_seed(2)
 
-from keras.models import Sequential, load_model
-from keras.layers import LSTM, Dense, Dropout
-
 class classifier(nn.Module):
     def __init__(self):
         '''
@@ -63,21 +60,6 @@ class classifier(nn.Module):
         return (torch.zeros(1, 1, self.hidden_size),
                 torch.zeros(1, 1, self.hidden_size))
 
-def get_tensorflow_model():
-    ## define basic model class
-    model = keras.models.Sequential()
-    model.add(keras.layers.LSTM(units=96, return_sequences=True, input_shape=(x_train.shape[1], 1)))
-    model.add(keras.layers.Dropout(0.2))
-    model.add(keras.layers.LSTM(units=96, return_sequences=True))
-    model.add(keras.layers.Dropout(0.2))
-    model.add(keras.layers.LSTM(units=96, return_sequences=True))
-    model.add(keras.layers.Dropout(0.2))
-    model.add(keras.layers.LSTM(units=96))
-    model.add(keras.layers.Dropout(0.2))
-    model.add(keras.layers.Dense(units=1))
-    model.compile(loss='mean_squared_error', optimizer='adam')
-    return model
-
 def get_torch_model():
     ## define basic model class and layering
     model = classifier()
@@ -92,13 +74,6 @@ def save_torch_model(model, dev_model=False):
         model_location = Location.Home(__file__) + '/main_storage/production_models/stock_prediction.h5'
         torch.save(model.state_dict(), model_location)
 
-def save_tensorflow_model(model, dev_model=False):
-    if dev_model:
-        today_str = datetime.date.today().strftime('%d_%m_%Y')
-        model.save(Location.Home(__file__) + '/main_storage/development_models/stock_prediction_' + today_str + '.h5')
-    else:
-        model.save(Location.Home(__file__) + '/main_storage/production_models/stock_prediction.h5')
-
 def load_torch_model(model, dev_model=False):
     if dev_model:
         today_str = datetime.date.today().strftime('%d_%m_%Y')
@@ -107,13 +82,4 @@ def load_torch_model(model, dev_model=False):
         model_location = Location.Home(__file__) + '/main_storage/production_models/stock_prediction.h5'
     torchload = torch.load(model_location)
     model.load_state_dict(torchload)
-    return model
-
-def load_tensorflow_model(dev_model=False):
-    if dev_model:
-        today_str = datetime.date.today().strftime('%d_%m_%Y')
-        model_location = Location.Home(__file__) + '/main_storage/development_models/stock_prediction_' + today_str + '.h5'
-    else:
-        model_location = Location.Home(__file__) + '/main_storage/production_models/stock_prediction.h5'
-    model = keras.models.load_model(model_location)
     return model
