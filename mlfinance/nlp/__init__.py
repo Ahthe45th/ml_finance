@@ -1,1 +1,1 @@
-from .train import Bert
+from .train import Bert, DistilBert
