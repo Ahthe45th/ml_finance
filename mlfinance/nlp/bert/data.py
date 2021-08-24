@@ -6,15 +6,15 @@ https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytor
 """
 
 
-from torch.utils.data import Dataset, DataLoader
-from torch import FloatTensor
 from transformers import BertTokenizerFast as BertTokenizer
 from sklearn.model_selection import train_test_split
-import pandas as pd
+from torch.utils.data import Dataset, DataLoader
 import pytorch_lightning as pl
-from typing import Optional
+from torch import FloatTensor
 from getpaths import getpath
+from typing import Optional
 from os.path import abspath
+import pandas as pd
 
 
 class BertDataset(Dataset):
