@@ -19,25 +19,6 @@ except ImportError:
     from utils import using_gpu
 
 
-def main(cfg):
-    """
-    training, testing, and evaluating done here
-    """
-    if cfg.mode == "train":
-
-        if using_gpu():
-            cfg = self.cfg["gpu"]
-        else:
-            cfg = self.cfg["cpu"]
-
-        bert = Bert(cfg)
-        bert.train()
-
-    elif cfg.mode == "test":
-        pass
-    else:
-        pass
-
 
 class Bert:
     def __init__(self, cfg=None, overrides=[]):
@@ -56,8 +37,16 @@ class Bert:
         self.model = None
         self.datamodule = None
         self.trainer = None
+    
+    def pre_train_loop(self):
+        pass
+
+    def post_train_loop(self):
+        pass
 
     def train(self):
+        self.pre_train_loop()
+
         if self.cfg.custom == False:
             # show configs at start of training session
             print(OmegaConf.to_yaml(self.cfg))
@@ -77,6 +66,39 @@ class Bert:
         self.trainer.fit(self.model, self.datamodule)
 
         self.trainer.save_checkpoint(self.cfg.checkpoint.name)
+
+        self.post_train_loop()
+
+
+class DistilBert(Bert):
+    def __init__(self, cfg=None, overrides=[]):
+        super().__init__(cfg=cfg, overrides=overrides)
+    
+    def pre_train_loop(self):
+        self.cfg.model.model_id='distilbert-base-uncased'
+        self.cfg.model.transformer_module='DistilBertForSequenceClassification'
+        self.cfg.datamodule.tokenizer='DistilBertTokenizerFast'
+
+
+def main(cfg):
+    """
+    training, testing, and evaluating
+    using CLI workflow done here
+    """
+    if cfg.mode == "train":
+
+        if using_gpu():
+            cfg = cfg["gpu"]
+        else:
+            cfg = cfg["cpu"]
+
+        bert = Bert(cfg)
+        bert.train()
+
+    elif cfg.mode == "test":
+        pass
+    else:
+        pass
 
 
 @hydra.main(config_path="./conf", config_name="config")
