@@ -1,7 +1,7 @@
 model:
   _target_: mlfinance.nlp.bert.model.BertBaseModel
   model_id: "bert-base-cased"
-  transformer_module: BertModel
+  transformer_module: BertForSequenceClassification
   num_labels: null # made dynamically, changing doesn't do anything
 
 datamodule:
@@ -9,13 +9,13 @@ datamodule:
   model_id: null
   data_path: null
   tokenizer: BertTokenizerFast
-  batch_size: 1
+  batch_size: 32
   max_token_len: 512
   num_workers: 2
 
 trainer:
   _target_: pytorch_lightning.Trainer
-  max_epochs: 1
+  max_epochs: 10
   progress_bar_refresh_rate: 1
   gpus: 1
 

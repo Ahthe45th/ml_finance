@@ -1,7 +1,7 @@
 model:
   _target_: mlfinance.nlp.bert.model.BertBaseModel
   model_id: "bert-base-cased"
-  transformer_module: BertModel
+  transformer_module: BertForSequenceClassification
   num_labels: null # made dynamically, changing doesn't do anything
 
 datamodule:
