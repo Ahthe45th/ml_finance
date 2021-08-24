@@ -1,12 +1,12 @@
 model:
-  _target_: mlfinance.nlp.bert.model.ToxicCommentTagger
+  _target_: mlfinance.nlp.bert.model.BertBaseModel
   name: "bert-base-cased"
   n_classes: 6
   n_training_steps: 1
   n_warmup_steps: 1
 
 datamodule:
-  _target_: mlfinance.nlp.bert.data.ToxicCommentDataModule
+  _target_: mlfinance.nlp.bert.data.BertDataModule
   model_name: null
   data_path: null
   batch_size: 1

@@ -5,7 +5,7 @@ from transformers import get_linear_schedule_with_warmup, AdamW
 import torch
 
 
-class ToxicCommentTagger(pl.LightningModule):
+class BertBaseModel(pl.LightningModule):
     def __init__(
         self,
         n_classes: int = None,

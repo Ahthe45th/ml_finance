@@ -17,7 +17,7 @@ from getpaths import getpath
 from os.path import abspath
 
 
-class ToxicCommentsDataset(Dataset):
+class BertDataset(Dataset):
     def __init__(self, data: pd.DataFrame, tokenizer, max_token_len: int = 128):
         self.tokenizer = tokenizer
         self.data = data
@@ -52,7 +52,7 @@ class ToxicCommentsDataset(Dataset):
         )
 
 
-class ToxicCommentDataModule(pl.LightningDataModule):
+class BertDataModule(pl.LightningDataModule):
     def __init__(
         self,
         model_name=None,
@@ -85,11 +85,11 @@ class ToxicCommentDataModule(pl.LightningDataModule):
         self.test_dataset = None
 
     def setup(self, stage: Optional[str] = None):
-        self.train_dataset = ToxicCommentsDataset(
+        self.train_dataset = BertDataset(
             self.train_df, self.tokenizer, self.max_token_len
         )
 
-        self.test_dataset = ToxicCommentsDataset(
+        self.test_dataset = BertDataset(
             self.test_df, self.tokenizer, self.max_token_len
         )
 
