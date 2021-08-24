@@ -2,23 +2,22 @@ model:
   _target_: mlfinance.nlp.bert.model.BertBaseModel
   model_id: "bert-base-cased"
   transformer_module: BertModel
-  n_classes: 6
-  n_training_steps: 1
-  n_warmup_steps: 1
- 
+  num_labels: null # made dynamically, changing doesn't do anything
+
 datamodule:
   _target_: mlfinance.nlp.bert.data.BertDataModule
   model_id: null
   data_path: null
+  tokenizer: BertTokenizerFast
+  batch_size: 1
   max_token_len: 512
-  batch_size: 32
   num_workers: 2
 
 trainer:
   _target_: pytorch_lightning.Trainer
   max_epochs: 1
   progress_bar_refresh_rate: 1
-  gpus: 0
+  gpus: 1
 
 checkpoint:
   name: checkpoint_${now:%Y-%m-%d}_${now:%H-%M-%S}
