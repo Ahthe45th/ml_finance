@@ -55,44 +55,53 @@ class BertDataset(Dataset):
 class BertDataModule(pl.LightningDataModule):
     def __init__(
         self,
-        model_name=None,
+        model_id=None,
         data_path=None,
         batch_size=1,
         max_token_len=128,
         num_workers=0,
+        **kwargs
     ):
 
         super().__init__()
         self.batch_size = batch_size
         self.num_workers = num_workers
+        self.max_token_len = max_token_len
 
-        self.model_name = model_name
-        if self.model_name == None:
-            self.model_name = "bert-base-uncased"
+        self.model_id = model_id
+        if self.model_id == None:
+            self.model_id = "bert-base-uncased"
 
         if data_path == None:
             cwd = getpath(abspath(__file__), custom=True)
-            df = pd.read_csv(cwd/'..'/'..'/"toxic_comments_small.csv")
+            self.df = pd.read_csv(cwd/'..'/'..'/"toxic_comments_small.csv")
         else:
-            df = pd.read_csv(data_path)
+            self.df = pd.read_csv(data_path)
 
-        self.n_classes = len(df.columns.tolist()[2:])
-        self.train_df, self.test_df = train_test_split(df, test_size=0.2)
-        self.tokenizer = BertTokenizer.from_pretrained(self.model_name)
-        self.max_token_len = max_token_len
+        self.n_classes = len(self.df.columns.tolist()[2:])
+        self.tokenizer = BertTokenizer.from_pretrained(self.model_id)
 
         self.train_dataset = None
+        self.val_dataset = None
         self.test_dataset = None
 
     def setup(self, stage: Optional[str] = None):
-        self.train_dataset = BertDataset(
-            self.train_df, self.tokenizer, self.max_token_len
-        )
 
-        self.test_dataset = BertDataset(
-            self.test_df, self.tokenizer, self.max_token_len
-        )
+        if stage == 'fit' or stage == None:
+            train_df, val_df = train_test_split(self.df, test_size=0.2)
 
+            self.train_dataset = BertDataset(
+                train_df, self.tokenizer, self.max_token_len
+            )
+
+            self.val_dataset = BertDataset(
+                val_df, self.tokenizer, self.max_token_len
+            )
+        if stage == 'test':
+            self.test_dataset = BertDataset(
+                self.df, self.tokenizer, self.max_token_len
+            )
+    
     def train_dataloader(self):
         return DataLoader(
             self.train_dataset,
@@ -103,7 +112,7 @@ class BertDataModule(pl.LightningDataModule):
 
     def val_dataloader(self):
         return DataLoader(
-            self.test_dataset, batch_size=self.batch_size, num_workers=self.num_workers
+            self.val_dataset, batch_size=self.batch_size, num_workers=self.num_workers
         )
 
     def test_dataloader(self):
