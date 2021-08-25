@@ -10,7 +10,7 @@ datamodule:
   data_path: null
   tokenizer: BertTokenizerFast
   batch_size: 1
-  max_token_len: 512
+  max_token_len: 100
   num_workers: 0
 
 trainer:
