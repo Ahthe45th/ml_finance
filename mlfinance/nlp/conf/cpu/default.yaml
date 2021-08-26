@@ -3,6 +3,8 @@ model:
   model_id: "bert-base-cased"
   transformer_module: BertForSequenceClassification
   num_labels: null # made dynamically, changing doesn't do anything
+  labels: null # also made dynamically, changing doesn't do anything
+  checkpoint_path: null # change if you want to load from a checkpoint
 
 datamodule:
   _target_: mlfinance.nlp.bert.data.BertDataModule
@@ -15,7 +17,7 @@ datamodule:
 
 trainer:
   _target_: pytorch_lightning.Trainer
-  max_epochs: 1
+  max_epochs: 2
   progress_bar_refresh_rate: 1
   gpus: 0
 
