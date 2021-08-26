@@ -40,5 +40,7 @@ class CustomModelPruning(ModelPruning):
             checkpoint["state_dict"] = copy.state_dict()
             pl_module.to(prev_device)
         
+        # garbage collection
+        del prev_device, copy
         # empty cache
         torch.cuda.empty_cache()
