@@ -38,11 +38,13 @@ class Bert:
         self.model = None
         self.datamodule = None
         self.trainer = None
+        self.callbacks = []
 
     def pre_loop(self):
         pass
 
-    def initialize(self):
+    def initialize(self, user_triggered=True):
+
         if self.cfg.custom == False:
             # show configs at start of training session
             print(OmegaConf.to_yaml(self.cfg))
@@ -63,6 +65,13 @@ class Bert:
 
             # make sure the tokenizer is for the right model
             self.datamodule.model_id = self.model.model_id
+        
+        if user_triggered == True:
+            # if user initializes modules on their own
+            # it will initialize with cfg once, then never again
+            # except if user_triggered = False
+            self.cfg.custom = True
+            print('custom module swapping now enabled')
 
     def load_callbacks(self):
         # monitor loss, and save checkpoint when loss gets better
@@ -78,6 +87,9 @@ class Bert:
 
         # prune model for faster model inference
         self.trainer.callbacks.append(CustomModelPruning("l1_unstructured", amount=0.5))
+
+        for callback in self.callbacks:
+            self.trainer.callbacks.append(callback)
 
     def quantize_model(self):
         # make smaller, quantized model
@@ -106,7 +118,7 @@ class Bert:
     def train(self):
         self.pre_loop()
 
-        self.initialize()
+        self.initialize(user_triggered=False)
 
         self.load_callbacks()
 
