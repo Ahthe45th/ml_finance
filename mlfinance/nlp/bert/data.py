@@ -22,7 +22,7 @@ class BertDataset(Dataset):
         self.tokenizer = tokenizer
         self.data = data
         self.max_token_len = max_token_len
-        self.label_columns = self.data.columns.tolist()[2:]
+        self.labels = self.data.columns.tolist()[2:]
 
     def __len__(self):
         return len(self.data)
@@ -31,7 +31,7 @@ class BertDataset(Dataset):
         data_row = self.data.iloc[index]
 
         comment_text = data_row.comment_text
-        labels = data_row[self.label_columns]
+        labels = data_row[self.labels]
 
         encoding = self.tokenizer.encode_plus(
             comment_text,
@@ -75,20 +75,21 @@ class BertDataModule(pl.LightningDataModule):
             self.df = pd.read_csv(cwd / ".." / ".." / "toxic_comments_small.csv")
         else:
             self.df = pd.read_csv(data_path)
-        
+
         self.batch_size = batch_size
         self.max_token_len = max_token_len
         self.num_workers = num_workers
-
-        self.num_labels = len(self.df.columns.tolist()[2:])
         self.tokenizer = tokenizer
+
+        self.labels = self.df.columns.tolist()[2:]
+        self.num_labels = len(self.labels)
 
         self.train_dataset = None
         self.val_dataset = None
         self.test_dataset = None
 
     def setup(self, stage: Optional[str] = None):
-        self.tokenizer = eval(f'transformers.{self.tokenizer}')
+        self.tokenizer = eval(f"transformers.{self.tokenizer}")
         self.tokenizer = self.tokenizer.from_pretrained(self.model_id)
 
         if stage == "fit" or stage == None:
@@ -99,7 +100,7 @@ class BertDataModule(pl.LightningDataModule):
             )
 
             self.val_dataset = BertDataset(val_df, self.tokenizer, self.max_token_len)
-        
+
         elif stage == "test":
             self.test_dataset = BertDataset(self.df, self.tokenizer, self.max_token_len)
 
@@ -113,7 +114,10 @@ class BertDataModule(pl.LightningDataModule):
 
     def val_dataloader(self):
         return DataLoader(
-            self.val_dataset, batch_size=self.batch_size, num_workers=self.num_workers
+            self.val_dataset,
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            shuffle=False,
         )
 
     def test_dataloader(self):
