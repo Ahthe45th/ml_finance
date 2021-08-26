@@ -7,8 +7,8 @@ https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytor
 """
 
 
-from ml_finance.mlfinance.nlp.callbacks import CustomModelPruning, ModelCheckpoint
-from ml_finance.mlfinance.nlp.utils import using_gpu
+from mlfinance.nlp.callbacks import CustomModelPruning, ModelCheckpoint
+from mlfinance.nlp.utils import using_gpu
 from omegaconf import DictConfig, OmegaConf
 from hydra import compose, initialize
 from getpaths import getpath
