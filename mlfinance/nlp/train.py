@@ -40,6 +40,8 @@ class Bert:
         self.trainer = None
         self.callbacks = []
 
+        self.model_pruning=False
+
     def pre_loop(self):
         pass
 
@@ -86,7 +88,8 @@ class Bert:
         )
 
         # prune model for faster model inference
-        self.trainer.callbacks.append(CustomModelPruning("l1_unstructured", amount=0.5))
+        if self.model_pruning==True:
+            self.trainer.callbacks.append(CustomModelPruning("l1_unstructured", amount=0.5))
 
         for callback in self.callbacks:
             self.trainer.callbacks.append(callback)
