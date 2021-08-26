@@ -1,2 +1,2 @@
-from .data import ToxicCommentsDataset, ToxicCommentDataModule
-from .model import ToxicCommentTagger
+from .data import BertDataset, BertDataModule
+from .model import BertBaseModel

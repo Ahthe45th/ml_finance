@@ -5,6 +5,7 @@ mlfinance/nlp/data
 **/outputs
 **/multirun
 **/test_checkpoint
+**/checkpoint*
 
 
 
