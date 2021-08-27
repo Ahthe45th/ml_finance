@@ -61,7 +61,7 @@ class Bert:
 
             # load checkpoint
             if self.cfg.model.checkpoint_path != None:
-                self.cfg.model.load_checkpoint(self.cfg.model.checkpoint_path)
+                self.model.load_checkpoint(self.cfg.model.checkpoint_path)
 
             self.trainer = hydra.utils.instantiate(self.cfg.trainer)
 
