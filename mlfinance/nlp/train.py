@@ -6,15 +6,22 @@ https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytor
 
 """
 
+# so many importing problems, gahhh
+from getpaths import getpath
+import sys, os
+# I just decided to import path to main file directly. This way, edits
+# don't have to be installed to python. It can just be run from anywhere
+sys.path.append(getpath(os.path.abspath(__file__), custom=True)/'..'/'..'/'..')
+
 
 from mlfinance.nlp.callbacks import CustomModelPruning, ModelCheckpoint
 from mlfinance.nlp.utils import using_gpu
 from omegaconf import DictConfig, OmegaConf
 from hydra import compose, initialize
-from getpaths import getpath
 import warnings
 import hydra
 import torch
+
 
 
 # stops warnings from being seen
@@ -59,10 +66,6 @@ class Bert:
 
             self.model = hydra.utils.instantiate(self.cfg.model)
 
-            # load checkpoint
-            if self.cfg.model.checkpoint_path != None:
-                self.model.load_checkpoint(self.cfg.model.checkpoint_path)
-
             self.trainer = hydra.utils.instantiate(self.cfg.trainer)
 
             # make sure the tokenizer is for the right model
@@ -74,6 +77,26 @@ class Bert:
             # except if user_triggered = False
             self.cfg.custom = True
             print('custom module swapping now enabled')
+    
+    def load_from_checkpoint(self, checkpoint_path:str = None):
+        # load checkpoint
+        if checkpoint_path != None:
+            self.cfg.model.checkpoint_path = checkpoint_path
+            
+        if self.cfg.model.checkpoint_path != None:
+            # this is a hack, but will be useful if we ever do transfer learning in the future
+            # this ONLY loads weights that are named the same way in the old and new model
+            old_state_dict = torch.load(self.cfg.model.checkpoint_path)['state_dict']
+            for key in old_state_dict.keys():
+                try:
+                    keys = key.split('.')[:-1]
+                    module_name = "self.model._modules['" + "']._modules['".join(keys) + "'].weight.data"
+                    eval(f"{module_name} = old_state_dict[{key}]")
+                except:
+                    print(f'could not find {key} in self.model')
+    
+    def load_checkpoint(self, checkpoint_path:str=None):
+        self.load_from_checkpoint(checkpoint_path)
 
     def load_callbacks(self):
         # monitor loss, and save checkpoint when loss gets better
@@ -84,6 +107,7 @@ class Bert:
                 save_top_k=1,
                 mode="min",
                 every_n_val_epochs=0,
+                save_weights_only=True
             )
         )
 
