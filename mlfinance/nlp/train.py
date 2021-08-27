@@ -6,12 +6,19 @@ https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytor
 
 """
 
+# so many importing problems, gahhh
+from getpaths import getpath
+import sys, os
 
-from ml_finance.mlfinance.nlp.callbacks import CustomModelPruning, ModelCheckpoint
-from ml_finance.mlfinance.nlp.utils import using_gpu
+# I just decided to import path to main file directly. This way, edits
+# don't have to be installed to python. It can just be run from anywhere
+sys.path.append(getpath(os.path.abspath(__file__), custom=True) / ".." / ".." / "..")
+
+
+from mlfinance.nlp.callbacks import CustomModelPruning, ModelCheckpoint
+from mlfinance.nlp.utils import using_gpu
 from omegaconf import DictConfig, OmegaConf
 from hydra import compose, initialize
-from getpaths import getpath
 import warnings
 import hydra
 import torch
@@ -38,11 +45,15 @@ class Bert:
         self.model = None
         self.datamodule = None
         self.trainer = None
+        self.callbacks = []
+
+        self.model_pruning = False
 
     def pre_loop(self):
         pass
 
-    def initialize(self):
+    def initialize(self, user_triggered=True):
+
         if self.cfg.custom == False:
             # show configs at start of training session
             print(OmegaConf.to_yaml(self.cfg))
@@ -55,14 +66,41 @@ class Bert:
 
             self.model = hydra.utils.instantiate(self.cfg.model)
 
-            # load checkpoint
-            if self.cfg.model.checkpoint_path != None:
-                self.cfg.model.load_checkpoint(self.cfg.model.checkpoint_path)
-
             self.trainer = hydra.utils.instantiate(self.cfg.trainer)
 
             # make sure the tokenizer is for the right model
             self.datamodule.model_id = self.model.model_id
+
+        if user_triggered == True:
+            # if user initializes modules on their own
+            # it will initialize with cfg once, then never again
+            # except if user_triggered = False
+            self.cfg.custom = True
+            print("custom module swapping now enabled")
+
+    def load_from_checkpoint(self, checkpoint_path: str = None):
+        # load checkpoint
+        if checkpoint_path != None:
+            self.cfg.model.checkpoint_path = checkpoint_path
+
+        if self.cfg.model.checkpoint_path != None:
+            # this is a hack, but will be useful if we ever do transfer learning in the future
+            # this ONLY loads weights that are named the same way in the old and new model
+            old_state_dict = torch.load(self.cfg.model.checkpoint_path)["state_dict"]
+            for key in old_state_dict.keys():
+                try:
+                    keys = key.split(".")[:-1]
+                    module_name = (
+                        "model._modules['"
+                        + "']._modules['".join(keys)
+                        + "'].weight.data"
+                    )
+                    setattr(self, module_name, old_state_dict[key])
+                except Exception as e:
+                    print(e, f"could not find {key} in self.model")
+
+    def load_checkpoint(self, checkpoint_path: str = None):
+        self.load_from_checkpoint(checkpoint_path)
 
     def load_callbacks(self):
         # monitor loss, and save checkpoint when loss gets better
@@ -73,11 +111,18 @@ class Bert:
                 save_top_k=1,
                 mode="min",
                 every_n_val_epochs=0,
+                save_weights_only=True,
             )
         )
 
         # prune model for faster model inference
-        self.trainer.callbacks.append(CustomModelPruning("l1_unstructured", amount=0.5))
+        if self.model_pruning == True:
+            self.trainer.callbacks.append(
+                CustomModelPruning("l1_unstructured", amount=0.5)
+            )
+
+        for callback in self.callbacks:
+            self.trainer.callbacks.append(callback)
 
     def quantize_model(self):
         # make smaller, quantized model
@@ -106,7 +151,9 @@ class Bert:
     def train(self):
         self.pre_loop()
 
-        self.initialize()
+        self.initialize(user_triggered=False)
+
+        self.load_from_checkpoint()
 
         self.load_callbacks()
 

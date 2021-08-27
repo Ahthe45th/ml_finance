@@ -36,7 +36,7 @@ class BertBaseModel(pl.LightningModule):
         self.transformer_module = transformer_module
 
         self.bert = self.bert = eval(
-            f"transformers.{transformer_module}.from_pretrained(model_id, num_labels={self.num_labels}, return_dict=True)"
+            f"transformers.{self.transformer_module}.from_pretrained(model_id, num_labels={self.num_labels}, return_dict=True)"
         )
         self.config = self.bert.config
 
