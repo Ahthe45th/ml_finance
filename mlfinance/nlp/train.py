@@ -82,7 +82,7 @@ class Bert:
         # load checkpoint
         if checkpoint_path != None:
             self.cfg.model.checkpoint_path = checkpoint_path
-            
+
         if self.cfg.model.checkpoint_path != None:
             # this is a hack, but will be useful if we ever do transfer learning in the future
             # this ONLY loads weights that are named the same way in the old and new model
@@ -90,10 +90,11 @@ class Bert:
             for key in old_state_dict.keys():
                 try:
                     keys = key.split('.')[:-1]
-                    module_name = "self.model._modules['" + "']._modules['".join(keys) + "'].weight.data"
-                    eval(f"{module_name} = old_state_dict[{key}]")
-                except:
-                    print(f'could not find {key} in self.model')
+                    module_name = "model._modules['" + "']._modules['".join(keys) + "'].weight.data"
+                    setattr(self, module_name, old_state_dict[key])
+                except Exception as e:
+                    print(e, f'could not find {key} in self.model')
+                    self.model._modules['bert']._modules['distilbert']._modules['embeddings']._modules['position_embeddings'].weight.data = old_state_dict['bert.distilbert.embeddings.position_embeddings.weight']
     
     def load_checkpoint(self, checkpoint_path:str=None):
         self.load_from_checkpoint(checkpoint_path)
@@ -146,6 +147,8 @@ class Bert:
         self.pre_loop()
 
         self.initialize(user_triggered=False)
+
+        self.load_from_checkpoint()
 
         self.load_callbacks()
 
