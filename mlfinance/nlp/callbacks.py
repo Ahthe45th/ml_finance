@@ -39,7 +39,7 @@ class CustomModelPruning(ModelPruning):
             self.make_pruning_permanent(copy)
             checkpoint["state_dict"] = copy.state_dict()
             pl_module.to(prev_device)
-        
+
         # garbage collection
         del prev_device, copy
         # empty cache
