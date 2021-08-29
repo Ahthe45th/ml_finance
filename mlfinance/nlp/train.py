@@ -5,28 +5,28 @@ https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytor
 
 
 """
-
-# so many importing problems, gahhh
+import hydra
+from hydra import compose, initialize
+from omegaconf import DictConfig
 from getpaths import getpath
 import sys, os
 
-# I just decided to import path to main file directly. This way, edits
-# don't have to be installed to python. It can just be run from anywhere
-sys.path.append(getpath(os.path.abspath(__file__), custom=True) / ".." / ".." / "..")
+try:
+    from .utils import using_gpu
+except ImportError:
+    from utils import using_gpu
 
-
-from mlfinance.nlp.callbacks import CustomModelPruning, ModelCheckpoint
-from mlfinance.nlp.utils import using_gpu
-from omegaconf import DictConfig, OmegaConf
-from hydra import compose, initialize
-import warnings
-import hydra
-import torch
-
-
-# stops warnings from being seen
-warnings.simplefilter("ignore")  # comment line when debugging
-
+def main(cfg):
+    """
+    training, testing, and evaluating done here
+    """
+    if cfg.mode == "train":
+        bert = Bert(cfg)
+        bert.train()
+    elif cfg.mode == "test":
+        pass
+    else:
+        pass
 
 class Bert:
     def __init__(self, cfg=None, overrides=[]):
@@ -194,11 +194,9 @@ def main(cfg):
     else:
         pass
 
-
 @hydra.main(config_path="./conf", config_name="config")
 def cli_hydra_entry(cfg: DictConfig) -> None:
     main(cfg)
-
 
 if __name__ == "__main__":
     cli_hydra_entry()
