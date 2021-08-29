@@ -5,21 +5,15 @@ https://curiousily.com/posts/multi-label-text-classification-with-bert-and-pytor
 
 
 """
-
-
 import hydra
 from hydra import compose, initialize
 from omegaconf import DictConfig
 from getpaths import getpath
 
-
-
 try:
     from .utils import using_gpu
 except ImportError:
     from utils import using_gpu
-
-
 
 def main(cfg):
     """
@@ -32,8 +26,6 @@ def main(cfg):
         pass
     else:
         pass
-
-
 
 class Bert:
     def __init__(self, cfg=None):
@@ -77,11 +69,9 @@ class Bert:
 
         self.trainer.save_checkpoint(self.cfg.checkpoint.name)
 
-
 @hydra.main(config_path="./conf", config_name="config")
 def cli_hydra_entry(cfg: DictConfig) -> None:
     main(cfg)
-
 
 if __name__ == "__main__":
     cli_hydra_entry()
