@@ -1,21 +1,23 @@
 model:
-  _target_: mlfinance.nlp.bert.model.ToxicCommentTagger
-  name: "bert-base-cased"
-  n_classes: 6
-  n_training_steps: 1
-  n_warmup_steps: 1
+  _target_: mlfinance.nlp.bert.model.BertBaseModel
+  model_id: "bert-base-cased"
+  transformer_module: BertForSequenceClassification
+  num_labels: null # made dynamically, changing doesn't do anything
+  labels: null # also made dynamically, changing doesn't do anything
+  checkpoint_path: null # change if you want to load from a checkpoint
 
 datamodule:
-  _target_: mlfinance.nlp.bert.data.ToxicCommentDataModule
-  model_name: null
+  _target_: mlfinance.nlp.bert.data.BertDataModule
+  model_id: null
   data_path: null
+  tokenizer: BertTokenizerFast
   batch_size: 1
-  max_token_len: 512
+  max_token_len: 100
   num_workers: 0
 
 trainer:
   _target_: pytorch_lightning.Trainer
-  max_epochs: 1
+  max_epochs: 2
   progress_bar_refresh_rate: 1
   gpus: 0
 
