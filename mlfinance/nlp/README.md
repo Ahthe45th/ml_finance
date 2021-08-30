@@ -20,7 +20,7 @@ Ever wanted to train an NLP model to classify texts? Worried that your model wil
 
 <br><br>
 
-Training a text classifier is as easy as:
+Training a text classifier is easy:
 
 ```python
 from mlfinance.nlp import Bert, DistilBert
@@ -39,6 +39,8 @@ distilbert.train()
 In order to view the how the model is learning while it's training, run this on the command line:
 
 > tensorboard --logdir lightning_logs
+
+<br><br>
 
 ---
 
@@ -137,6 +139,8 @@ bert.train()
 
 \~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~\~
 
+<br><br>
+
 \*The transformer model id, name, and tokenizer can be found by searching the docs [here](https://huggingface.co/models). 
 
 The defaults are bert-base-cased, BertForSequenceClassification, and BertTokenizerFast, respectively.
@@ -150,6 +154,8 @@ BERT |	bert-base-uncased, bert-large-uncased, bert-base-multilingual-uncased | B
 DistilBERT |	distilbert-base-uncased, and others | DistilBertForSequenceClassification | DistilBertTokenizerFast
 RoBERTa |	roberta-base, roberta-large, roberta-large-mnli | RobertaForSequenceClassification | RobertaTokenizerFast
 XLNet |	xlnet-base-cased, xlnet-large-cased | XLMForSequenceClassification | XLMTokenizer
+
+<br><br>
 
 ---
 ## Testing Trained Model
@@ -176,6 +182,8 @@ for batch in iter(dataloader):
 ```
 Any suggestions to make this process more straightforward are welcome.
 
+<br><br>
+
 ---
 
 ## Command Line Workflow
@@ -185,6 +193,8 @@ All the configs can also be changed using the command line, without writing any 
 > python train.py datamodule.batch_size=4 model.checkpoint_path=path/to/model.ckpt
 
 Other configs can be changed in a similar manner. You can essentially do all your training entirely from the command line.
+
+<br><br>
 
 ---
 
