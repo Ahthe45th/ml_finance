@@ -175,6 +175,7 @@ bert.cfg.datamodule.datapath = 'path/to/new/data.csv'
 bert.initialize() # always do this before testing on your own data
 
 dataloader = bert.datamodule.test_dataloader()
+bert.model.eval()
 
 for batch in iter(dataloader):
     loss, predictions = bert.model(model)
