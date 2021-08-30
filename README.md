@@ -4,4 +4,4 @@ This can be either a conda one or a python virualenv one or anything else really
 Then cd to the top directory then run
 `pip install -e . -r requirements.txt`
 
-And your ready to start developing
+And you're ready to start developing
