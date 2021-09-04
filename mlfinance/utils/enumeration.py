@@ -1,5 +1,6 @@
 import os
 
+
 def search_dir(path, extension):
     result = []
     for root, dirs, files in os.walk(path):

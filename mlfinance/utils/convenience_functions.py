@@ -4,8 +4,10 @@ import pickle as pl
 import time
 
 
-
 def using_gpu():
+    """
+    
+    """
     try:
         torch.cuda.current_device()
         # GPU is being used!
@@ -23,15 +25,18 @@ def using_gpu():
 
 def pickle(data, path):
     """
+    One-liner for pickling data
+    
     pickle(data, 'path/to/pickled/file')
     """
-
     with open(path, "wb") as file_handler:
         pl.dump(data, file_handler)
 
 
 def unpickle(path):
     """
+    One-liner for unpickling data
+
     unpickle('path/to/pickled/file')
     """
     with open(path, "rb") as file_handler:
@@ -40,18 +45,17 @@ def unpickle(path):
 
 class Timer(object):
     """
-    Useful for timing stuff
-    timer = Timer()
-    # first process
-    timer.start()
-    process1()
-    timer.stop()
-    print(timer.elapsed())
-    # second process
-    timer.start()
-    process2()
-    timer.stop()
-    print(timer.elapsed())
+    Timer for timing stuff
+
+    Example
+    -------
+    >>> timer = Timer()
+    >>> timer.start()
+    >>> process1()
+    >>> timer.stop()
+    8.535007953643799
+    >>> print(timer.elapsed())
+    8.535007953643799
     """
 
     def __init__(self):

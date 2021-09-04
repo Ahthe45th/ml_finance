@@ -16,6 +16,7 @@ try:
 except ImportError:
     from utils import using_gpu
 
+
 def main(cfg):
     """
     training, testing, and evaluating done here
@@ -27,6 +28,7 @@ def main(cfg):
         pass
     else:
         pass
+
 
 class Bert:
     def __init__(self, cfg=None, overrides=[]):
@@ -53,7 +55,7 @@ class Bert:
         pass
 
     def initialize(self, user_triggered=True):
-
+        """ """
         if self.cfg.custom == False:
             # show configs at start of training session
             print(OmegaConf.to_yaml(self.cfg))
@@ -72,9 +74,9 @@ class Bert:
             self.datamodule.model_id = self.model.model_id
 
         if user_triggered == True:
-            # if user initializes modules on their own
+            # if user initializes modules on their own (user_triggered=True)
             # it will initialize with cfg once, then never again
-            # except if user_triggered = False
+            # otherwise, it will initialize every time bert.train() is run
             self.cfg.custom = True
             print("custom module swapping now enabled")
 
@@ -194,9 +196,11 @@ def main(cfg):
     else:
         pass
 
+
 @hydra.main(config_path="./conf", config_name="config")
 def cli_hydra_entry(cfg: DictConfig) -> None:
     main(cfg)
+
 
 if __name__ == "__main__":
     cli_hydra_entry()
