@@ -28,9 +28,9 @@ finnhub_client = finnhub.Client(api_key=finnhub_api_key)
 
 def finnhub_metrics(ticker: str) -> None:
     """
-    This function is a wrapper for Finnhub's API. 
+    This function is a wrapper for Finnhub's API.
     It takes in a ticker, and saves the following data to a folder:
-    
+
     stock_candles:
         - date
         - open
@@ -74,7 +74,7 @@ def finnhub_metrics(ticker: str) -> None:
 
     Parameters:
         ticker: A string representing the ticker of the stock.
-    
+
     Returns:
         None. Saves data to a file.
     """

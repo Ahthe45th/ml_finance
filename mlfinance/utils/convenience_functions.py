@@ -5,9 +5,7 @@ import time
 
 
 def using_gpu():
-    """
-    
-    """
+    """ """
     try:
         torch.cuda.current_device()
         # GPU is being used!
@@ -26,7 +24,7 @@ def using_gpu():
 def pickle(data, path):
     """
     One-liner for pickling data
-    
+
     pickle(data, 'path/to/pickled/file')
     """
     with open(path, "wb") as file_handler:
