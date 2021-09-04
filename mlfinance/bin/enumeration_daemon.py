@@ -8,6 +8,11 @@ from mlfinance.utils.general_utils import force_mkdir, run_thread
 
 
 def main():
+    """
+    runs stock grabbing functions from mlfinance.utils
+
+    example of how to get stock data
+    """
     if os.path.exists(Location.Home(__file__) + "/stocks/short_term"):
         shutil.rmtree(Location.Home(__file__) + "/stocks/short_term")
     force_mkdir(Location.Home(__file__) + "/stocks/short_term")

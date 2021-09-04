@@ -120,6 +120,8 @@ def fetchstockquotes_google(symbol: str) -> Dict:
 
 def get_price(tickers: str) -> Dict:
     """
+    WARNING: NOT YET IMPLEMENTED
+
     Returns the historical stock prices for the given tickers.
 
     Args:
@@ -167,7 +169,7 @@ def get_company_name(symbol):
 
 def get_historical_data(ticker, period="max"):
     """
-    Get historical data for a stock.
+    Get historical data for a stock from yahoo finance.
 
     Parameters
     ----------

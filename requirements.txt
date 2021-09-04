@@ -15,3 +15,4 @@ nest-asyncio==1.5.1
 googlefinance==0.7
 scikit-learn==0.24.1
 hydra-core==1.1.1
+matplotlib==3.4.3

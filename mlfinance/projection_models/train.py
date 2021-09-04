@@ -24,6 +24,26 @@ def train_torch(x_train, y_train, epochs, batch_size):
 
 
 def prediction_test():
+    """
+    This function predicts the stock exchange prices for a set of 
+    company stocks using a pre-trained model.
+
+    model : Torch model
+        A Torch model that is pre-trained and saved in an h5 file.
+    stock_values : pandas dataframe
+        Dataset of the weekly stock value of a set of company stocks that 
+        is to be predicted.
+    scaler : Scikit-Learn MinMaxScaler object 
+        The scaler used to scale the original dataset to a 0-1 scale.
+    x_test : np.ndarray, shape=(k, 1) 
+        The scaled dataset used to predict stock prices.
+    y_test : np.ndarray, shape=(k, 1) 
+        The actual dataset without any scaling. This will be required for 
+        the graph later on.
+    fig, ax : matplotlib figure and axis objects, optional
+        Figure size and background color for the plot to be produced. 
+        Defaults: figsize = (16, 8) and facecolor = "
+    """
     model = load_model("stock_prediction.h5")
     predictions = model.predict(x_test)
     predictions = scaler.inverse_transform(predictions)

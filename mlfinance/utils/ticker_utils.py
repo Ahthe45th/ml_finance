@@ -1,6 +1,7 @@
-import pandas as pd
 import io
 import requests
+import pandas as pd
+from typing import List, Union
 
 from enum import Enum
 
@@ -85,7 +86,24 @@ class SectorConstants:
     TRANSPORT = "Transportation"
 
 
-def get_tickers(NYSE=True, NASDAQ=True, AMEX=True, S_AND_P=True):
+def get_tickers(
+    NYSE: bool = True, NASDAQ: bool = True, AMEX: bool = True, S_AND_P: bool = True
+) -> List[str]:
+    """
+    This function returns a list of tickers in the specified exchanges.
+
+    Parameters:
+        NYSE (bool): Whether to include NYSE tickers. Defaults to True.
+        NASDAQ (bool): Whether to include NASDAQ tickers. Defaults to True.
+        AMEX (bool): Whether to include AMEX tickers. Defaults to True.
+        S_AND_P (bool or str): Whether to include S&P 500 tickers. Defaults to True.
+            If string, the function will return the difference between the list of
+            tickers and the S&P 500 tickers. This is useful when removing tickers
+            that are listed in the S&P 500.
+
+    Return:
+        list: A list of tickers in the specified exchanges.
+    """
     tickers_list = []
     if NYSE:
         tickers_list.extend(__exchange2list("nyse"))
@@ -103,7 +121,17 @@ def get_tickers(NYSE=True, NASDAQ=True, AMEX=True, S_AND_P=True):
     return tickers_list
 
 
-def s_and_p_tickers(get_back="Symbol"):
+def s_and_p_tickers(get_back: str = "Symbol") -> List[str]:
+    """
+    This function takes no arguments and returns a list of ticker symbols of companies
+    included in S&P 500 index. The data is taken from Wikipedia.
+
+    Arguments:
+        get_back (str): This argument specifies what information about companies is returned.
+        The default value is "Symbol", which means that just ticker symbols will be returned.
+    Returns:
+        companies_info (list): A list of ticker symbols or other info about companies.
+    """
     table = pd.read_html("https://en.wikipedia.org/wiki/List_of_S%26P_500_companies")
     df = table[0]
     df.to_csv("S&P500-Info.csv")
@@ -111,7 +139,26 @@ def s_and_p_tickers(get_back="Symbol"):
     return companies_info
 
 
-def get_tickers_filtered(mktcap_min=None, mktcap_max=None, sectors=None):
+def get_tickers_filtered(
+    mktcap_min: int = None, mktcap_max: int = None, sectors: List[str] = None
+) -> List[str]:
+    """
+    Get tickers from the specified exchanges, filtered by market cap and sectors
+
+    Parameters
+    ----------
+    mktcap_min : int, optional
+        If specified, filter by market cap.
+    mktcap_max : int, optional
+        If specified, filter by market cap.
+    sectors : list of str, optional
+        If specified, filter by sectors.
+
+    Returns
+    -------
+    tickers_list : list of str
+        A list of tickers.
+    """
     tickers_list = []
     for exchange in _EXCHANGE_LIST:
         tickers_list.extend(
@@ -123,6 +170,72 @@ def get_tickers_filtered(mktcap_min=None, mktcap_max=None, sectors=None):
 
 
 def get_biggest_n_tickers(top_n, sectors=None):
+    """
+    Top N tickers according to market cap.
+
+    Parameters
+    ----------
+    top_n : int
+        The number of tickers to be returned
+    sectors : str or list of str, optional
+        A string or list of strings of sectors to filter by. Default is None.
+        If not None, must be one of the following:
+            ['Consumer Discretionary',
+            'Consumer Staples',
+            'Energy',
+            'Financials',
+            'Health Care',
+            'Industrials',
+            'Information Technology',
+            'Materials',
+            'Real Estate',
+            'Telecommunication Services',
+            'Utilities']
+        If a list is passed, companies will be filtered by all of the passed sectors.
+        E.g. passing ['Energy', 'Financials'] will return companies that are in either
+        the Energy or Financials sectors.
+
+    Returns
+    -------
+    tickers : list of str
+        A list of tickers from the passed criteria. These are sorted in descending order by market cap.
+
+    Raises
+    ------
+    ValueError if some invalid sectors are passed.
+    ValueError if top_n is larger than the number of companies that meet the other criteria.
+
+
+    Example usage:  get_biggest_n_tickers(10) returns the 10 biggest companies on the NYSE,
+    according to their most recent market cap.
+    These are sorted in descending order of market cap.
+    The sector of each company is also returned.
+
+        get_biggest_n_tickers(10, sectors=["Energy", "Financials"]) returns the 10 biggest
+            companies on the NYSE in the Energy or Financials sectors, according to their
+            most recent market cap.
+
+        get_biggest_n_tickers(10, sectors="Utilities") returns the 10 biggest companies on
+            the NYSE in the Utilities sector, according to their most recent market cap.
+
+        get_biggest_n_tickers(10, sectors=["Utilities", "Financials"]) returns the 10 biggest
+            companies on the NYSE in the Utilities or Financials sectors, according to their
+            most recent market cap.
+
+        get_biggest_n_tickers(10, sectors=["Industrials", "Financials", "Utilities"]) returns
+            the 10 biggest companies on the NYSE in the Industrials, Financials or Utilities
+            sectors, according to their most recent market cap.
+
+        Note that even though Utilities is listed twice above, it will appear only once in this
+            list because it is a sector that only has companies with a market cap above
+            $100M (as per IEX).
+
+        get_biggest_n_tickers(10, sectors=["Consumer Discretionary", "Financials"]) returns an
+            error because Consumer Discretionary is not a valid sector according to IEX.
+
+        get_biggest_n_tickers(10, sectors=["Foo", "Bar"]) returns an error because Foo and Bar
+            are not valid sectors according to IEX.
+    """
     df = pd.DataFrame()
     for exchange in _EXCHANGE_LIST:
         temp = __exchange2df(exchange)
@@ -157,6 +270,24 @@ def get_biggest_n_tickers(top_n, sectors=None):
 
 
 def get_tickers_by_region(region):
+    """
+    Get a list of tickers from a specific region.
+
+    Parameters
+    ----------
+    region : Region
+        A Region enum value, e.g. Region.ASIA or Region.EUROPE.
+
+    Returns
+    -------
+    list of str
+        A list of tickers from the given region.
+
+    Raises
+    ------
+    ValueError
+        If the region argument is not a valid Region enum value, e.g. Region.AFRICA or Region.ASIA.
+    """
     if region in Region:
         response = requests.get(
             "https://old.nasdaq.com/screening/companies-by-name.aspx",
@@ -173,6 +304,17 @@ def get_tickers_by_region(region):
 
 
 def __exchange2df(exchange):
+    """
+    Parameters
+    ----------
+    exchange : str
+        The name of the stock exchange
+
+    Returns
+    -------
+    df : DataFrame
+        A pandas DataFrame with the stocks listed on the exchange
+    """
     r = requests.get(
         "https://api.nasdaq.com/api/screener/stocks", headers=headers, params=params
     )
@@ -187,7 +329,51 @@ def __exchange2list(exchange):
     return df_filtered["symbol"].tolist()
 
 
-def __exchange2list_filtered(exchange, mktcap_min=None, mktcap_max=None, sectors=None):
+def __exchange2list_filtered(
+    exchange: str,
+    mktcap_min: int = None,
+    mktcap_max: int = None,
+    sectors: Union[str, List[str]] = None,
+):
+    """
+    This function will return a list of tickers from the specified exchange.
+
+    The function accepts the following arguments:
+
+        exchange: string
+            The exchange to get the tickers from. Valid values are:
+                'amex'
+                'nyse'
+                'nasdaq'
+                'otc'
+
+        mktcap_min: int or float, optional
+            Minimum market cap value to filter by. If not specified, no filtering
+            will be done.
+
+        mktcap_max: int or float, optional
+            Maximum market cap value to filter by. If not specified, no filtering
+            will be done.
+
+        sectors: str or list of str, optional
+            Sector(s) to filter by. If not specified, no filtering will be done.
+            Valid values are:
+                'Basic Materials'
+                'Conglomerates'
+                'Consumer Goods'
+                'Financial'
+                'Healthcare'
+                'Industrial Goods'
+                'Services'
+                'Technology'
+                'Utilities'
+
+        Returns: list of str
+            A list of tickers from the specified exchange.
+
+        Example Usage:
+        >>> __exchange2list_filtered('nasdaq')
+    """
     df = __exchange2df(exchange)
     df = df.dropna(subset={"marketCap"})
     df = df[~df["symbol"].str.contains("\.|\^")]
@@ -218,13 +404,57 @@ def __exchange2list_filtered(exchange, mktcap_min=None, mktcap_max=None, sectors
     return df["symbol"].tolist()
 
 
-def save_tickers(NYSE=True, NASDAQ=True, AMEX=True, filename="tickers.csv"):
+def save_tickers(
+    NYSE: bool = True,
+    NASDAQ: bool = True,
+    AMEX: bool = True,
+    filename: str = "tickers.csv",
+) -> None:
+    """
+    Makes a csv file of the list of tickers from the NYSE, NASDAQ and AMEX.
+
+    Parameters
+    ----------
+    NYSE : bool, default True
+        If True, tickers from NYSE are included.
+    NASDAQ : bool, default True
+        If True, tickers from NASDAQ are included.
+    AMEX : bool, default True
+        If True, tickers from AMEX are included.
+    filename : str, default "tickers.csv"
+        Name of the file to save the tickers.
+
+    Returns
+    -------
+    None
+    """
     tickers2save = get_tickers(NYSE, NASDAQ, AMEX)
     df = pd.DataFrame(tickers2save)
     df.to_csv(filename, header=False, index=False)
 
 
-def save_tickers_by_region(region, filename="tickers_by_region.csv"):
+def save_tickers_by_region(
+    region: str, filename: str = "tickers_by_region.csv"
+) -> None:
+    """
+    Saves a list of tickers that belong to a specified region to a CSV file.
+
+    Parameters:
+        region (str): The region to save tickers for.
+            Valid regions are:
+                AFRICA
+                EUROPE
+                ASIA
+                AUSTRALIA+AND+SOUTH+PACIFIC
+                CARIBBEAN
+                SOUTH+AMERICA
+                MIDDLE+EAST
+                NORTH+AMERICA
+        filename (str): The name of the file to save the tickers to.
+
+    Returns:
+        None
+    """
     tickers2save = get_tickers_by_region(region)
     df = pd.DataFrame(tickers2save)
     df.to_csv(filename, header=False, index=False)
