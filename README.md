@@ -63,15 +63,30 @@ Coming soon...
 Coming soon...
 
 # Overview
+```yaml
+ml_finance:
 
  - mlfinance: machine learning applied to stock prediction
+ 
  - node_modules: @Ahthe45th
- - .gitignore: tells git which files to ignore when pushing to the project
- - mlfinance.bash: installs [twint](https://github.com/twintproject/twint) requirements
+ 
+ - .gitignore: tells git which files to ignore when pushing
+               commits to the project
+ 
+ - mlfinance.bash: installs [twint]
+                   (https://github.com/twintproject/twint) requirements
+ 
  - package-lock.json: @Ahthe45th
+ 
  - package.json: @Ahthe45th
- - requirements.txt: required python dependencies for running mlfinance
+ 
+ - requirements.txt: python dependencies for running mlfinance
+ 
  - S&P500-Info.csv: @Ahthe45th
- - setup.py: tells pip (python's package manager) how to install mlfinance
+ 
+ - setup.py: tells pip how to install mlfinance
+ 
  - setup.py.orig: legacy code
+ 
  - token: @Ahthe45th
+```
