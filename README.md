@@ -16,7 +16,7 @@ And you're ready to start developing
 ## Tutorial on Virtual Environments
 
 
-#### Option 1: venv
+### Option 1: venv
 First, install virtualenv
 ```python
 pip3 install virtualenv
@@ -52,10 +52,26 @@ deactivate
 
 
 <br> </br>
-#### Option 2: conda
+### Option 2: conda
 Coming soon...
 
 <br> </br>
+
+---
 # Next Steps
 
 Coming soon...
+
+# Overview
+
+ - mlfinance: machine learning applied to stock prediction
+ - node_modules: @Ahthe45th
+ - .gitignore: tells git which files to ignore when pushing to the project
+ - mlfinance.bash: installs [twint](https://github.com/twintproject/twint) requirements
+ - package-lock.json: @Ahthe45th
+ - package.json: @Ahthe45th
+ - requirements.txt: required python dependencies for running mlfinance
+ - S&P500-Info.csv: @Ahthe45th
+ - setup.py: tells pip (python's package manager) how to install mlfinance
+ - setup.py.orig: legacy code
+ - token: @Ahthe45th

@@ -9,7 +9,7 @@ Contains code that can be reused for different projects
  - general_utils.py: has function to run other functions in its own thread, can be paired with asyncio for multithreading with semaphores
  - import_all_utils.py: legacy code for importing all utilities
  - locales.py: get absolute path to ml_finance folder and mlfinance.utils folder
- - S&P500-Info.csv: money
+ - S&P500-Info.csv: example csv downloaded from finnhub; @Ahthe45th isn't this just a copy of S&P500-Info.csv in the main folder?
  - ticker_utils.py: functions for getting tickers (tickers are the is just another name for change in price) from NYSE, NASDAQ, AMEX, and S&P500
 
 # How to Use
