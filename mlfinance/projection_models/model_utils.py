@@ -4,34 +4,46 @@ import torch.nn.functional as F
 
 torch.manual_seed(2)
 
+
 class classifier(nn.Module):
     def __init__(self):
-        '''
+        """
         Initialises the rnn model and then implicitly initialises
         everything we need to do for the text processing parts
-        '''
+        """
         super(classifier, self).__init__()
         self.hidden_size = 32
         self.lstm1 = nn.LSTM(
-            input_size=96,hidden_size=self.hidden_size,
+            input_size=96,
+            hidden_size=self.hidden_size,
             num_layers=2,
-            batch_first=True,bidirectional=True
-            )
+            batch_first=True,
+            bidirectional=True,
+        )
         self.lstm2 = nn.LSTM(
-            input_size=96,hidden_size=self.hidden_size,
-            num_layers=2,dropout=0.2,
-            batch_first=True,bidirectional=True
-            )
+            input_size=96,
+            hidden_size=self.hidden_size,
+            num_layers=2,
+            dropout=0.2,
+            batch_first=True,
+            bidirectional=True,
+        )
         self.lstm3 = nn.LSTM(
-            input_size=96,hidden_size=self.hidden_size,
-            num_layers=2,dropout=0.5,
-            batch_first=True,bidirectional=True
-            )
+            input_size=96,
+            hidden_size=self.hidden_size,
+            num_layers=2,
+            dropout=0.5,
+            batch_first=True,
+            bidirectional=True,
+        )
         self.lstm4 = nn.LSTM(
-            input_size=96,hidden_size=self.hidden_size,
-            num_layers=2,dropout=0.2,
-            batch_first=True,bidirectional=True
-            )
+            input_size=96,
+            hidden_size=self.hidden_size,
+            num_layers=2,
+            dropout=0.2,
+            batch_first=True,
+            bidirectional=True,
+        )
         self.output = nn.Linear(32, 1)
         # self.hidden = self.init_hidden()
 
@@ -57,29 +69,50 @@ class classifier(nn.Module):
         # Refer to the Pytorch documentation to see exactly
         # why they have this dimensionality.
         # The axes semantics are (num_layers, minibatch_size, hidden_dim)
-        return (torch.zeros(1, 1, self.hidden_size),
-                torch.zeros(1, 1, self.hidden_size))
+        return (
+            torch.zeros(1, 1, self.hidden_size),
+            torch.zeros(1, 1, self.hidden_size),
+        )
+
 
 def get_torch_model():
     ## define basic model class and layering
     model = classifier()
     return model
 
+
 def save_torch_model(model, dev_model=False):
     if dev_model:
-        today_str = datetime.date.today().strftime('%d_%m_%Y')
-        model_location = Location.Home(__file__) + '/main_storage/development_models/stock_prediction_' + today_str + '.h5'
+        today_str = datetime.date.today().strftime("%d_%m_%Y")
+        model_location = (
+            Location.Home(__file__)
+            + "/main_storage/development_models/stock_prediction_"
+            + today_str
+            + ".h5"
+        )
         torch.save(model.state_dict(), model_location)
     else:
-        model_location = Location.Home(__file__) + '/main_storage/production_models/stock_prediction.h5'
+        model_location = (
+            Location.Home(__file__)
+            + "/main_storage/production_models/stock_prediction.h5"
+        )
         torch.save(model.state_dict(), model_location)
+
 
 def load_torch_model(model, dev_model=False):
     if dev_model:
-        today_str = datetime.date.today().strftime('%d_%m_%Y')
-        model_location = Location.Home(__file__) + '/main_storage/development_models/stock_prediction_' + today_str + '.h5'
+        today_str = datetime.date.today().strftime("%d_%m_%Y")
+        model_location = (
+            Location.Home(__file__)
+            + "/main_storage/development_models/stock_prediction_"
+            + today_str
+            + ".h5"
+        )
     else:
-        model_location = Location.Home(__file__) + '/main_storage/production_models/stock_prediction.h5'
+        model_location = (
+            Location.Home(__file__)
+            + "/main_storage/production_models/stock_prediction.h5"
+        )
     torchload = torch.load(model_location)
     model.load_state_dict(torchload)
     return model
