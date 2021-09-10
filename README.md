@@ -67,9 +67,7 @@ Coming soon...
 ml_finance:
 
  - mlfinance: machine learning applied to stock prediction
- 
- - node_modules: @Ahthe45th
- 
+  
  - .gitignore: tells git which files to ignore when pushing
                commits to the project
  
@@ -78,15 +76,9 @@ ml_finance:
  
  - package-lock.json: @Ahthe45th
  
- - package.json: @Ahthe45th
- 
  - requirements.txt: python dependencies for running mlfinance
- 
- - S&P500-Info.csv: @Ahthe45th
  
  - setup.py: tells pip how to install mlfinance
  
  - setup.py.orig: legacy code
- 
- - token: @Ahthe45th
 ```
