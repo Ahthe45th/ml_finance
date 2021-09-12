@@ -7,10 +7,10 @@ AI Trading - https://github.com/borisbanushev/stockpredictionai/blob/master/read
 FinRL Library - https://github.com/AI4Finance-LLC/FinRL-Library
 Deep Learning IV - https://github.com/achillesrasquinha/bulbea
 RLTrader - https://github.com/notadamking/RLTrader
+Personae - https://github.com/Ceruleanacg/Personae
+
 ##Data Processing & Techniques repos
-
+ALPHAPY Ml framework - https://github.com/ScottfreeLLC/AlphaPy
+Data Processing Solutions - https://github.com/BlackArbsCEO/Adv_Fin_ML_Exercises
 ##Portfolio management repos
-
-##General technique repos
-
-##Other repos
+Online Portfolio selection - https://nbviewer.jupyter.org/github/paulperry/quant/blob/master/OLPS_Comparison.ipynb
