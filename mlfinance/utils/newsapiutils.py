@@ -30,15 +30,18 @@ def get_articles_sentiment(searchterm):
     dates, urls, description, titles = get_articles(searchterm)
     sentiments = []
     for url in urls:
-        resp = requests.get(url)
-        soup = BeautifulSoup(resp.text, 'lxml')
-        sentences = soup.findAll("p")
-        passage = ""
-        for sentence in sentences:
-            passage += sentence.text
-        sentiment = sia.polarity_scores(passage)['compound']
-        sentiments.append(sentiment)
-    return dates, sentiments
+        try:
+            resp = requests.get(url)
+            soup = BeautifulSoup(resp.text, 'lxml')
+            sentences = soup.findAll("p")
+            passage = ""
+            for sentence in sentences:
+                passage += sentence.text
+                sentiment = sia.polarity_scores(passage)['compound']
+                sentiments.append(sentiment)
+                return dates, sentiments
+        except:
+            pass
 
 dates, sentiments = get_articles_sentiment('google')
 
