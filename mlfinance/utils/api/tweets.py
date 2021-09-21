@@ -1,13 +1,17 @@
-import os
+'''
+Generates tweets about a keyword.
+'''
 import pandas as pd
 import twint
 import nest_asyncio
 import re
 
-import mlfinance.utils.locales as Location
-
 nest_asyncio.apply()
 
+import mlfinance.utils.general.locales as Location
+import os
+
+from mlfinance.utils.preprocessing.tweets import read_tweets
 
 def read_tweets(about, limit=1000, time_period="unspecified"):
     """
@@ -27,8 +31,11 @@ def read_tweets(about, limit=1000, time_period="unspecified"):
     twint.run.Search(c)
     df = pd.read_csv(file_locale)
     return df
-
-
-if __name__ == "__main__":
-    keyword = input("Put in keyword: ")
-    read_tweets(keyword)
+    
+def tweet_dataset(keyword, stock_hashtag="#stocks", Limit=3500):
+    keyword_tweets = read_tweets(keyword, limit=Limit)
+    hashtag_tweets = read_tweets(stock_hashtag, limit=Limit)
+    all_columns = list(hashtag_tweets.columns.values)
+    hashtag_tweets = hashtag_tweets.astype(keyword_tweets.dtypes.to_dict())
+    dataset = pd.merge(hashtag_tweets, keyword_tweets, on=all_columns)
+    return dataset

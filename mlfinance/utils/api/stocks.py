@@ -9,8 +9,11 @@ import datetime
 import traceback
 import pandas as pd
 import yfinance as yf
+
 from googlefinance import getQuotes
+
 import mlfinance.utils.locales as Location
+
 from typing import Dict
 
 from mlfinance.utils.ticker_utils import get_tickers, s_and_p_tickers

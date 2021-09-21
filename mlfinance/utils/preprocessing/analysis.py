@@ -4,7 +4,6 @@ Functions that analyze csv stock data
 
 """
 
-
 import yfinance as yf
 import pandas as pd
 import numpy as np
@@ -23,10 +22,6 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 
 
 sentiment_analyzer = SentimentIntensityAnalyzer()
-
-
-def general_metrics():
-    pass
 
 
 def gainers(number_to_return=10):

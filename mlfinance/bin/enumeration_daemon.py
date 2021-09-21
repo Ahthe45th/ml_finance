@@ -1,11 +1,10 @@
 import os
 import shutil
-import mlfinance.utils.locales as Location
+import mlfinance.utils.general.locales as Location
 
-from mlfinance.utils.api_utils import enumerate_stocks_finnhub, enumerate_stocks_yahoo
-from mlfinance.utils.ticker_utils import get_tickers
-from mlfinance.utils.general_utils import force_mkdir, run_thread
-
+from mlfinance.utils.api.stocks import enumerate_stocks_finnhub, enumerate_stocks_yahoo
+from mlfinance.utils.api.tickers import get_tickers
+from mlfinance.utils.general.general_functions import force_mkdir, run_thread
 
 def main():
     """
@@ -30,7 +29,6 @@ def main():
         Stock_Failure=Stock_Failure,
         Stocks_Not_Imported=Stocks_Not_Imported,
     )
-
 
 if __name__ == "__main__":
     main()

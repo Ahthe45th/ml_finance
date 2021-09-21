@@ -1,5 +1,0 @@
-defaults:
-  - _self_
-  - cpu: default
-  - gpu: default
-mode: train
