@@ -6,6 +6,7 @@ import praw
 import requests
 import pickle as pl
 import pandas as pd
+from tqdm import tqdm
 from pathed import Path
 from bs4 import BeautifulSoup
 from praw.models import MoreComments
@@ -255,12 +256,12 @@ def get_comments_from_search(
 
     if limit != None:
         iters = min([len(links), limit])
-        for i in range(iters):
+        for i in tqdm(range(iters)):
             link = links[i]
             comments.append(get_posts(url=link, reddit=reddit))
             time.sleep(wait_time)
     else:
-        for link in links:
+        for link in tqdm(links):
             comments.append(get_posts(url=link, reddit=reddit))
             time.sleep(wait_time)
 
