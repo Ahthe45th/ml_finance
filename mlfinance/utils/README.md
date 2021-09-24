@@ -12,7 +12,7 @@ utils:
  - api/tickers.py: functions for getting tickers (tickers are the is just another
                    name for change in price) from NYSE, NASDAQ, AMEX, and S&P500
 
- - api/tickers.py: functions for getting tweets from (you'll never guess) Twitter
+ - api/tweets.py: functions for getting tweets from (you'll never guess) Twitter
 
  - general/convenience_functions.py: check if gpu is being used, timer for timing objects,
                                      pickling and unpickling objects
